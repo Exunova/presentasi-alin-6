@@ -63,16 +63,14 @@ unrelated change; it is fine for `server.ts` and small new files.
 
 ## Deploy
 
-Push to `main` triggers `.github/workflows/deploy.yml`, which runs
-`deno deploy --prod` against org `symful`, app `present-alin`. Those two names
-also live in the `deploy` section of `deno.json`; change both places together.
+Auto-deploy uses the Deno Deploy GitHub integration, not GitHub Actions: the
+app `present-alin` in org `symful` is connected to this repository, so a push
+to `main` builds and releases the site. Org, app, and the static `./public`
+runtime all come from the `deploy` section of `deno.json`; change them there.
 
-The app is a **static** runtime serving `./public` (see `deno.json`). `server.ts`
-is only for local preview and is not used in production.
+Live site: https://present-alin.symful.deno.net
 
-Required GitHub repository secret: `DENO_DEPLOY_TOKEN`, a Deno Deploy
-organization access token. No other credentials are needed. The token must be
-able to create deployments in org `symful`.
+`server.ts` is only for local preview and is not used in production.
 
 Manual deploy, when needed:
 

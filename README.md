@@ -1,5 +1,7 @@
 # Presentasi Ruang Hasil Kali Dalam
 
+Situs: https://present-alin.symful.deno.net
+
 Presentasi web untuk Aljabar Linear pertemuan 6 (Bab VI), disusun dari materi
 `ALIN-6 2AB Modif Nj`. Isinya: definisi dan aksioma hasil kali dalam, norm,
 himpunan ortogonal dan ortonormal, proses Gram-Schmidt, proyeksi ortogonal,
@@ -64,22 +66,12 @@ build dibaca dari `deno.json`, termasuk nama org dan aplikasi:
 }
 ```
 
-Deploy berjalan otomatis lewat `.github/workflows/deploy.yml` setiap kali ada
-push ke `main`. Yang perlu disiapkan sekali di GitHub:
+Deploy berjalan otomatis lewat integrasi GitHub di Deno Deploy: aplikasi
+`present-alin` di org `symful` sudah tersambung ke repositori ini, jadi setiap
+push ke `main` langsung dibangun dan dirilis oleh Deno Deploy. Pengaturan build
+diambil dari bagian `deploy` pada `deno.json`, bukan dari GitHub Actions.
 
-1. Buat access token organisasi di dashboard Deno Deploy
-   (https://console.deno.com), lalu simpan sebagai repository secret bernama
-   `DENO_DEPLOY_TOKEN`.
-2. Pastikan aplikasi `present-alin` sudah ada di org `symful` dan sumbernya
-   `local`. Kalau belum:
-
-```sh
-deno deploy create --org symful --app present-alin \
-  --source local --runtime-mode static --static-dir public --region global
-```
-
-Tidak ada kredensial lain yang dibutuhkan. Deploy manual dari mesin sendiri
-tetap bisa:
+Deploy manual dari mesin sendiri tetap bisa:
 
 ```sh
 deno deploy --prod
