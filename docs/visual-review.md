@@ -81,3 +81,11 @@ nol yang memang dibahas tetap ditampilkan. Uji browser animasi normal memastikan
 v tidak berpindah pangkal, w/sum hilang saat tidak dipakai, kedua jalur
 homogenitas benar, serta vektor nol sah tetap terlihat. Semua 120 tahap lolos
 pemeriksaan galat dan luapan vertikal; screenshot homogenitas/penyangkal diperiksa.
+
+
+Atas permintaan pengguna, susunan pengantar dan Euclides dikembalikan persis
+ke commit 2d83811. Satu perubahan pada pengantar: menyatakan eksplisit bahwa
+contoh menggunakan hasil kali dalam Euclides. Perbaikan aksioma dan penghilangan
+vektor tidak terpakai tetap dipertahankan. Kembali 27 slide; 119 tahap lolos
+pemeriksaan browser tanpa galat atau luapan vertikal. Kesamaan berkas konsep
+dengan versi acuan (kecuali kalimat tersebut) telah diperiksa secara langsung.

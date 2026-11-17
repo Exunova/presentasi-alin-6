@@ -100,7 +100,7 @@ Lihat [catatan pemeriksaan](docs/visual-review.md).
 
 ## Pengantar konsep
 
-Presentasi kini berisi 28 slide: 24 slide materi dan empat pengantar visual
+Presentasi kini berisi 27 slide: 24 slide materi dan empat pengantar visual
 sebelum perhitungan (ruang vektor, makna hasil kali dalam, ortogonal/ortonormal,
 dan proyeksi). `public/concepts.js` menyajikan ilustrasi Euclides; definisi umum
 dan contoh PDF tetap dipertahankan. Proyeksi diperkenalkan sebelum Gram–Schmidt.
@@ -125,7 +125,7 @@ secara bertahap, proyeksi yang disorot, dan arti hasilnya. Aljabar dan koordinat
 di bawah diagram mengikuti warna vektornya. Ilustrasi aplikasi baru muncul
 pada akhir penjelasan; animasi aplikasi menghormati reduced motion.
 
-## Satu alamat, banyak host dan presenter (28 slide)
+## Satu alamat, banyak host dan presenter (27 slide)
 
 Buka alamat situs yang sama, lalu pilih **Host** atau **Presenter**. Semua perangkat
 masuk ke satu sesi bersama; tidak ada kode ruang, tautan per peran, atau host utama.
