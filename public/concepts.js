@@ -57,7 +57,7 @@
   }, {
     before: 4,
     concept: "metric-negative",
-    title: "Hasil Kali Dalam di Kuadran II",
+    title: "Hasil Kali Dalam Sudut Tumpul",
     intro: "Vektor b tetap (2,0). Sekarang diberikan a = (−4,3).",
     steps: [
       s("Ubah arah gerak a", "Ambil a = (−4,3): 4 satuan ke kiri dan 3 satuan ke atas. Vektor b tetap (2,0).", "a = (−4,3); b = (2,0)", 1),
