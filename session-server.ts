@@ -7,7 +7,9 @@ export type View = {
 type Stroke = { id: string; color: string; width: number; points: number[][]; slide: number };
 type Shared = { view: View; ink: Stroke[]; redo: Stroke[]; revision: number; sender?: string };
 const deployed = Boolean(Deno.env.get("DENO_DEPLOY") || Deno.env.get("DENO_DEPLOYMENT_ID"));
-if (!deployed) await Deno.mkdir(".runtime", { recursive: true });
+if (!deployed && !Deno.env.get("ALIN_KV_PATH")) {
+  await Deno.mkdir(".runtime", { recursive: true });
+}
 const kv = await Deno.openKv(
   Deno.env.get("ALIN_KV_PATH") || (deployed ? undefined : ".runtime/shared-v2.sqlite"),
 );
