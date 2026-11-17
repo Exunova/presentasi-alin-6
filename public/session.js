@@ -61,11 +61,13 @@
     if (online && role !== "local") socket.send(JSON.stringify({ ...data, sender }));
   }
   function draw(preview) {
-    board.replaceChildren();
+    const existing = new Map([...board.children].map(path => [path.dataset.id, path]));
+    const keep = new Set();
     const slide = window.deckAPI.get().slide;
     for (const s of [...ink, ...(preview && !ink.some(s => s.id === preview.id) ? [preview] : [])]) {
       if (s.slide !== slide) continue;
-      const path = document.createElementNS(board.namespaceURI, "polyline");
+      keep.add(s.id);
+      const path = existing.get(s.id) || document.createElementNS(board.namespaceURI, "polyline");
       path.setAttribute("points", s.points.map((p) => p.join(",")).join(" "));
       path.setAttribute("fill", "none");
       path.setAttribute("stroke", s.color);
@@ -73,8 +75,9 @@
       path.setAttribute("stroke-linecap", "round");
       path.setAttribute("stroke-linejoin", "round");
       path.dataset.id = s.id;
-      board.append(path);
+      if (!path.parentNode) board.append(path);
     }
+    for (const [id, path] of existing) if (!keep.has(id)) path.remove();
   }
   function localInk(m) {
     const slide = window.deckAPI.get().slide;
@@ -187,6 +190,18 @@
   picker.innerHTML = `<p class="role-kicker">ALJABAR LINEAR · D4 2B</p><h1 id="role-title">Bergabung ke presentasi</h1><p>Satu presentasi bersama. Pilih peran untuk perangkat ini.</p><div class="role-options"><button data-role="host"><strong>Host</strong><span>Bagikan layar dan kendalikan slide, animasi, serta whiteboard.</span></button><button data-role="presenter"><strong>Presenter</strong><span>Kendalikan slide, animasi, dan whiteboard bersama presenter lain.</span></button></div><p class="role-note">Host dan presenter memiliki kontrol yang sama dalam satu sesi.</p><button id="local-preview">Pratinjau sendiri tanpa sinkronisasi</button>`;
   document.body.append(picker);
   picker.addEventListener("cancel", e => e.preventDefault());
+  const preparation = document.createElement("p");
+  preparation.setAttribute("role", "status");
+  preparation.textContent = "Menyiapkan gambar dan font…";
+  picker.append(preparation);
+  const roleButtons = [...picker.querySelectorAll("button")];
+  roleButtons.forEach(b => b.disabled = true);
+  Promise.allSettled([...document.images].map(img => img.decode()).concat([document.fonts.ready])).then(results => {
+    preparation.textContent = results.some(r => r.status === "rejected")
+      ? "Sebagian gambar gagal dimuat. Muat ulang halaman untuk mencoba kembali."
+      : "Gambar dan font siap. Pilih peran untuk mulai.";
+    roleButtons.forEach(b => b.disabled = false);
+  });
   let notePanel = null, noteEditor = null, noteKey = "", sharedNotes = {}, notesReady = false, notesVersion = "";
   const pendingNotes = new Map();
   // Geometry is private to this browser; only note text is synchronized.
@@ -435,7 +450,7 @@
         send({ type: "view", view: JSON.parse(v) });
       }
     }
-  }, 80);
+  }, 16);
   setInterval(() => {
     if (online) {
       if (Date.now() - lastSeen > 45000) {

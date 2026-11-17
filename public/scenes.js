@@ -902,6 +902,7 @@
     });
     let index = 0,
       frame = 0,
+      motion = null,
       playing = false,
       yaw = -.65,
       pitch = .55,
@@ -1013,6 +1014,7 @@
       slide.dataset.sceneStep = String(index);
     }
     function stop() {
+      motion = null;
       cancelAnimationFrame(frame);
       frame = 0;
       playing = false;
@@ -1020,6 +1022,8 @@
     }
     function move(next, auto = false) {
       cancelAnimationFrame(frame);
+      frame = 0;
+      motion = null;
       const previous = rendered;
       index = Math.max(0, Math.min(next, config.steps.length - 1));
       const target = config.steps[index];
@@ -1033,6 +1037,7 @@
       }
       clock = performance.now();
       const duration = 850;
+      motion = { id: crypto.randomUUID(), from: previous, startedAt: Date.now(), duration };
       function tick(now) {
         if (!slide.classList.contains("is-active") || document.hidden) {
           stop();
@@ -1110,15 +1115,29 @@
     scenes.set(slide, {
       stop,
       get() {
-        return { index, yaw, pitch, visual: rendered };
+        return { index, yaw, pitch, ...(motion ? { motion } : { visual: rendered }) };
       },
       set(v) {
         if (!v) return;
-        stop();
-        index = Math.max(0, Math.min(v.index, config.steps.length - 1));
+        const sameMotion = v.motion?.id && v.motion.id === motion?.id;
         yaw = v.yaw;
         pitch = v.pitch;
-        render(v.visual || config.steps[index]);
+        if (sameMotion) { render(); return; }
+        stop();
+        index = Math.max(0, Math.min(v.index, config.steps.length - 1));
+        motion = v.motion || null;
+        const target = config.steps[index];
+        if (motion && !reduced.matches) {
+          const currentMotion = motion;
+          const start = performance.now() - Math.max(0, Math.min(currentMotion.duration, Date.now() - currentMotion.startedAt));
+          const tick = now => {
+            if (motion !== currentMotion) return;
+            const raw = Math.min(1, (now - start) / currentMotion.duration);
+            render(interpolate(currentMotion.from, target, raw * raw * (3 - 2 * raw)));
+            frame = raw < 1 ? requestAnimationFrame(tick) : 0;
+          };
+          tick(performance.now());
+        } else render(v.visual || target);
         ui();
         const input = lab.querySelector("input");
         if (input) input.value = String(yaw * 180 / Math.PI);

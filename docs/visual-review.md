@@ -142,3 +142,28 @@ and orthogonality statements retain their mathematical roles.
 Green notation explanation added below the final introductory calculation.
 Browser traversal found no semicolons in visible presentation text across all
 111 interactive states. Red/blue pens verified with left drag and Ctrl+left drag.
+
+### Smooth synchronized transitions
+
+Replaced per-frame visual snapshots with a stable motion descriptor (start state,
+target step, duration, identifier, start time). Receivers interpolate locally
+with the original easing and 850 ms duration. Pause still sends an exact visual
+snapshot; reset and reduced-motion retain their behavior. Auto-play progression
+is driven by the controller and each step has one descriptor. Receivers ignore
+repeat descriptors so whiteboard activity does not restart a transition.
+
+View detection interval reduced from 80 ms to 16 ms, but completed animations no
+longer generate intermediate state writes. KV change commits broadcast directly
+to local peers. Preview-only KV updates no longer reload the entire shared state;
+previews relay to local sockets immediately, with KV retained across instances.
+Whiteboard reconciles existing polylines instead of rebuilding every SVG node.
+Assets decode and fonts finish loading before role selection is enabled.
+
+Verification: real Edge presenter/host pair, one view message per transition,
+local host response 24–32 ms across two runs, more than 150 SVG mutation batches
+on host during the transition. Mutation batches are not an FPS measurement.
+Custom pen colors synchronize, all 11 protocol/math tests pass, all 111 visual
+states pass without script errors or detected vertical overflow, lint/typecheck
+pass. These timings are local, not a Deno production or internet benchmark.
+Network transit, cross-region KV latency, and clock skew can still affect timing.
+No asset resolution, geometry, easing, or animation duration was reduced.
