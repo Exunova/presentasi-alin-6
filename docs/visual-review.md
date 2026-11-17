@@ -97,3 +97,7 @@ Uji dua presenter dan satu host: edit dua arah, reload, perpindahan slide, ganti
 peran ke host, tombol W pada host, dan pembatasan pesan pada server semuanya lolos.
 Notes tidak memakai localStorage. Snapshot notes menyertakan versionstamp untuk
 mengabaikan kiriman terlambat. Sebelas tes lulus, deno lint/check lulus.
+
+### Draggable presenter notes
+
+Verified in Edge with two presenter pages and one host: header drag changes only the local panel position; shared text still synchronizes; closing/reopening preserves position; dragging to screen edges and resizing to 600 x 450 keeps the panel reachable. Host W and switching presenter to host produce no notes panel. Protocol tests verify hosts never receive notes. All 11 tests, Deno lint, and server type check pass.

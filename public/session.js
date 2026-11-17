@@ -188,7 +188,53 @@
   picker.addEventListener("cancel", e => e.preventDefault());
   let notePanel = null, noteEditor = null, noteKey = "", sharedNotes = {}, notesReady = false, notesVersion = "";
   const pendingNotes = new Map();
+  // Geometry is private to this browser; only note text is synchronized.
+  let notePosition = null, noteResizeObserver = null;
+  function placeNotes(x, y) {
+    if (!notePanel) return;
+    const rect = notePanel.getBoundingClientRect();
+    notePosition = {
+      x: Math.max(0, Math.min(x, window.innerWidth - rect.width)),
+      y: Math.max(0, Math.min(y, window.innerHeight - rect.height)),
+    };
+    Object.assign(notePanel.style, { left: `${notePosition.x}px`, top: `${notePosition.y}px`, right: "auto" });
+  }
+  function clampNotes() {
+    if (!notePanel) return;
+    const rect = notePanel.getBoundingClientRect();
+    placeNotes(notePosition?.x ?? rect.left, notePosition?.y ?? rect.top);
+  }
+  window.addEventListener("resize", clampNotes);
+  function enableNoteDragging() {
+    const header = notePanel.querySelector("header");
+    header.title = "Seret untuk memindahkan notes";
+    let drag = null;
+    header.addEventListener("pointerdown", e => {
+      if (e.target.closest("button") || e.button !== 0 || !e.isPrimary) return;
+      const rect = notePanel.getBoundingClientRect();
+      drag = { id: e.pointerId, x: e.clientX - rect.left, y: e.clientY - rect.top };
+      header.setPointerCapture(e.pointerId);
+      header.classList.add("dragging");
+      e.preventDefault();
+    });
+    header.addEventListener("pointermove", e => {
+      if (drag?.id === e.pointerId) placeNotes(e.clientX - drag.x, e.clientY - drag.y);
+    });
+    const endDrag = e => {
+      if (drag?.id !== e.pointerId) return;
+      drag = null;
+      header.classList.remove("dragging");
+      if (header.hasPointerCapture(e.pointerId)) header.releasePointerCapture(e.pointerId);
+    };
+    header.addEventListener("pointerup", endDrag);
+    header.addEventListener("pointercancel", endDrag);
+    header.addEventListener("lostpointercapture", endDrag);
+    noteResizeObserver = new ResizeObserver(clampNotes);
+    noteResizeObserver.observe(notePanel);
+    clampNotes();
+  }
   function closeNotes() {
+    noteResizeObserver?.disconnect(); noteResizeObserver = null;
     notePanel?.remove(); notePanel = null; noteEditor = null; noteKey = "";
   }
   function noteSlide() {
@@ -224,6 +270,7 @@
     };
     noteEditor.addEventListener("keydown", e => { if (e.key === "Escape") { e.stopPropagation(); closeNotes(); } });
     loadNote();
+    enableNoteDragging();
   }
   setInterval(() => {
     if (role !== "presenter") closeNotes();

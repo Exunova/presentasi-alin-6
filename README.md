@@ -175,3 +175,5 @@ Host; pengguna yang memilih ulang Presenter memperoleh akses presenter.
 Tes: `ALIN_URL=http://localhost:8017 node --test tests/shared-notes.test.mjs`
 (pada Windows, set variabel lingkungan dengan sintaks PowerShell). Jalankan server
 uji dengan ALIN_KV_PATH berbeda agar catatan pengujian tidak masuk sesi produksi.
+
+Notes dapat diseret melalui bagian judulnya menggunakan mouse atau sentuhan. Posisi serta buka/tutup notes berlaku lokal pada masing-masing presenter; isi tetap dibagikan kepada semua presenter. Posisi dipertahankan ketika notes ditutup dan dibuka kembali dalam halaman yang sama, dan dibatasi agar tetap terjangkau di layar. Host tidak menerima isi notes dan tidak dapat membukanya dengan W.
