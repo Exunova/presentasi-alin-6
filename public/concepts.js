@@ -111,6 +111,12 @@
   negative.steps[2].formulaParts = ["⟨", red("a"), ",", blue("b"), "⟩ = ", red("a₁"), blue("b₁"), " + ", red("a₂"), blue("b₂"), "\n= (", red("−4"), " × ", blue("2"), ") + (", red("3"), " × ", blue("0"), ")\n= −8 + 0 = −8"];
   negative.steps[3].formulaParts = ["⟨", red("(4,3)"), ",", blue("(2,0)"), "⟩ = 8\n⟨", red("(−4,3)"), ",", blue("(2,0)"), "⟩ = −8"];
   positive.steps.splice(4, 2);
+  positive.steps.unshift(s(
+    "Dari ruang vektor ke hasil kali dalam",
+    "Pada pertemuan sebelumnya, kita telah mempelajari ruang vektor. Sekarang, ruang vektor tersebut dilengkapi operasi hasil kali dalam. Operasi ini memasangkan dua vektor dan menghasilkan bilangan real, serta harus memenuhi empat aksioma.",
+    "Ruang vektor + operasi hasil kali dalam → ruang hasil kali dalam",
+    -1,
+  ));
   negative.steps.splice(0, 2);
   globalThis.drawAlinConcept = (svg, c, state) => {
     svg.replaceChildren();
@@ -172,6 +178,13 @@
     };
     const square = (x, y) =>
       n("path", { d: `M${x + 16},${y} v-16 h-16`, stroke: ink, "stroke-width": 2, fill: "none" });
+    if (c.concept === "metric" && p < 0) {
+      text(90, 130, "Ruang vektor V", 30);
+      text(90, 205, "+ operasi hasil kali dalam", 26, blue);
+      text(90, 260, "⟨u,v⟩ ∈ R", 30, green);
+      text(90, 335, "Memenuhi empat aksioma", 25);
+      return;
+    }
     if (c.concept.startsWith("metric")) {
       const negative = c.concept === "metric-negative";
       const base = [negative ? 420 : 160, 335], A = [negative ? 140 : 440, 125];
