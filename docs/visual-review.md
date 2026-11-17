@@ -89,3 +89,11 @@ contoh menggunakan hasil kali dalam Euclides. Perbaikan aksioma dan penghilangan
 vektor tidak terpakai tetap dipertahankan. Kembali 27 slide; 119 tahap lolos
 pemeriksaan browser tanpa galat atau luapan vertikal. Kesamaan berkas konsep
 dengan versi acuan (kecuali kalimat tersebut) telah diperiksa secara langsung.
+
+
+Revisi notes bersama dan soal: 115 tahap tanpa galat/luapan. UI diperiksa untuk
+Contoh Soal 1–2 simbolik. Notes memakai KV terpisah, disinkronkan ke presenter saja.
+Uji dua presenter dan satu host: edit dua arah, reload, perpindahan slide, ganti
+peran ke host, tombol W pada host, dan pembatasan pesan pada server semuanya lolos.
+Notes tidak memakai localStorage. Snapshot notes menyertakan versionstamp untuk
+mengabaikan kiriman terlambat. Sebelas tes lulus, deno lint/check lulus.

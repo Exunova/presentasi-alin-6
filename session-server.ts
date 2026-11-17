@@ -62,6 +62,44 @@ async function broadcast() {
   const message = JSON.stringify({ type: "state", ...data, hosts, presenters });
   for (const s of clients.keys()) if (s.readyState === 1) s.send(message);
 }
+const notesRoot = ["alin-notes-v1", "revision"];
+async function broadcastNotes(target?: WebSocket) {
+  let notes: Record<string, string> = {}, version: string | null = null;
+  for (;;) {
+    const before = await kv.get(notesRoot);
+    notes = {};
+    for await (const entry of kv.list<string>({ prefix: ["alin-notes-v1", "slide"] })) {
+      notes[String(entry.key[2])] = entry.value;
+    }
+    const after = await kv.get(notesRoot);
+    if (before.versionstamp === after.versionstamp) {
+      version = after.versionstamp;
+      break;
+    }
+  }
+  const message = JSON.stringify({ type: "notes", notes, version });
+  for (const [socket, client] of clients) {
+    if (client.role === "presenter" && socket.readyState === 1 && (!target || socket === target)) {
+      socket.send(message);
+    }
+  }
+}
+(async () => {
+  for await (const _ of kv.watch([notesRoot])) await broadcastNotes();
+})().catch(console.error);
+let notesVersion: string | null = null;
+setInterval(async () => {
+  if (![...clients.values()].some((c) => c.role === "presenter")) return;
+  try {
+    const entry = await kv.get(notesRoot);
+    if (entry.versionstamp !== notesVersion) {
+      notesVersion = entry.versionstamp;
+      await broadcastNotes();
+    }
+  } catch (e) {
+    console.error("Notes refresh failed", e);
+  }
+}, 500);
 async function watch() {
   for await (const entries of kv.watch([rootKey, previewKey])) {
     await broadcast();
@@ -163,6 +201,7 @@ export function sessionRoute(request: Request): Response | undefined {
     clients.set(socket, { id, role });
     await heartbeat();
     await broadcast();
+    if (role === "presenter") await broadcastNotes(socket);
   };
   socket.onclose = async () => {
     clients.delete(socket);
@@ -185,6 +224,31 @@ export function sessionRoute(request: Request): Response | undefined {
       if (m.type === "ping") {
         await heartbeat();
         if (socket.readyState === 1) socket.send('{"type":"pong"}');
+        return;
+      }
+      if (m.type === "note") {
+        if (role !== "presenter") return;
+        if (
+          typeof m.key !== "string" || !m.key.length || m.key.length > 200 ||
+          typeof m.text !== "string" || new TextEncoder().encode(m.text).length > 50000 ||
+          typeof m.editId !== "string" || m.editId.length > 80
+        ) throw Error("Catatan tidak sah atau terlalu panjang.");
+        const committed = await kv.atomic().set(["alin-notes-v1", "slide", m.key], m.text).set(
+          notesRoot,
+          crypto.randomUUID(),
+        ).commit();
+        if (!committed.ok) throw Error("Catatan belum tersimpan; coba kembali.");
+        if (socket.readyState === 1) {
+          socket.send(
+            JSON.stringify({
+              type: "note-saved",
+              key: m.key,
+              editId: m.editId,
+              version: committed.versionstamp,
+            }),
+          );
+        }
+        await broadcastNotes();
         return;
       }
       if (m.type === "preview") {

@@ -747,7 +747,7 @@
         const approximate = coord.some((x) => Math.abs(x * 100 - Math.round(x * 100)) > 1e-6);
         label(
           v.to,
-          `${name} ${approximate ? "≈ " : ""}(${
+          v.coordinatesText ? `${name} (${v.coordinatesText})` : `${name} ${approximate ? "≈ " : ""}(${
             coord.map((x) => Number(x.toFixed(2))).join(", ")
           })`,
           { class: "vector-label", style: `fill:${color};font-size:17px`, opacity },
@@ -833,6 +833,7 @@
     }
     const heading = slide.querySelector("h2");
     heading.textContent = config.title;
+    slide.dataset.title = config.title;
     const inner = slide.querySelector(".slide__inner"), header = slide.querySelector(".s-head");
     inner.replaceChildren(header);
     const lab = document.createElement("div");
@@ -955,6 +956,7 @@
             ? "tegak"
             : v.label.replace(/ · panjang.*$/, "")
         }: (${coordinates.map((x) => Number(x.toFixed(3))).join(", ")})${approx ? " ≈" : ""}`;
+        if (v.coordinatesText) item.textContent = `${v.label}: (${v.coordinatesText})`;
         item.title =
           "Komponen vektor = koordinat ujung − koordinat pangkal. Desimal bertanda ≈ adalah pendekatan; rumus eksak ada di kiri.";
         algebra.append(item);

@@ -3,7 +3,7 @@
   let lastSeen = Date.now();
   for (const name of ["keydown", "pointerdown", "input", "click"]) {
     document.addEventListener(name, (e) => {
-      if (e.isTrusted && !e.target.closest("#session-panel,#session-badge,#role-picker")) {
+      if (e.isTrusted && !e.target.closest("#session-panel,#session-badge,#role-picker,#presenter-notes")) {
         ownsControl = true;
       }
     }, true);
@@ -129,11 +129,24 @@
       revision = -1;
       lastSeen = Date.now();
       setStatus(`Terhubung sebagai ${role}.`);
+      if (role === "presenter") for (const [key, edit] of pendingNotes) send({ type: "note", key, ...edit });
     };
     socket.onmessage = (e) => {
       lastSeen = Date.now();
       const m = JSON.parse(e.data);
       if (m.type === "pong") return;
+      if (m.type === "notes" && role === "presenter") {
+        if ((m.version || "") < notesVersion) return;
+        notesVersion = m.version || ""; sharedNotes = m.notes; notesReady = true; loadNote(true); return;
+      }
+      if (m.type === "note-saved" && role === "presenter") {
+        if (pendingNotes.get(m.key)?.editId === m.editId) {
+          const saved = pendingNotes.get(m.key); sharedNotes[m.key] = saved.text;
+          if (m.version > notesVersion) notesVersion = m.version;
+          pendingNotes.delete(m.key); loadNote(true);
+        }
+        return;
+      }
       if (m.type === "error") { setStatus(m.message); return; }
       if (m.type === "preview") {
         if (m.sender !== sender) draw(m.stroke);
@@ -173,7 +186,51 @@
   picker.innerHTML = `<p class="role-kicker">ALJABAR LINEAR · D4 2B</p><h1 id="role-title">Bergabung ke presentasi</h1><p>Satu presentasi bersama. Pilih peran untuk perangkat ini.</p><div class="role-options"><button data-role="host"><strong>Host</strong><span>Bagikan layar dan kendalikan slide, animasi, serta whiteboard.</span></button><button data-role="presenter"><strong>Presenter</strong><span>Kendalikan slide, animasi, dan whiteboard bersama presenter lain.</span></button></div><p class="role-note">Host dan presenter memiliki kontrol yang sama dalam satu sesi.</p><button id="local-preview">Pratinjau sendiri tanpa sinkronisasi</button>`;
   document.body.append(picker);
   picker.addEventListener("cancel", e => e.preventDefault());
+  let notePanel = null, noteEditor = null, noteKey = "", sharedNotes = {}, notesReady = false, notesVersion = "";
+  const pendingNotes = new Map();
+  function closeNotes() {
+    notePanel?.remove(); notePanel = null; noteEditor = null; noteKey = "";
+  }
+  function noteSlide() {
+    const slide = document.querySelector(".slide.is-active");
+    return { key: slide.dataset.scene || slide.dataset.title, title: slide.querySelector("h2")?.textContent || slide.dataset.title };
+  }
+  function loadNote(force = false) {
+    if (!notePanel || role !== "presenter") return;
+    const current = noteSlide(), changed = current.key !== noteKey;
+    noteEditor.disabled = !online || !notesReady;
+    if (changed || force) {
+      noteKey = current.key;
+      notePanel.querySelector("h3").textContent = current.title;
+      const text = pendingNotes.get(noteKey)?.text ?? sharedNotes[noteKey] ?? "";
+      if (noteEditor.value !== text) noteEditor.value = text;
+    }
+    notePanel.querySelector("[role=status]").textContent = !online ? "Terputus — menunggu koneksi kembali" : !notesReady ? "Memuat notes bersama…" : pendingNotes.has(noteKey) ? "Menyimpan ke server…" : "Tersimpan di server · dibagikan ke semua presenter";
+  }
+  function toggleNotes() {
+    if (role !== "presenter" || picker.open) return;
+    if (notePanel) { closeNotes(); return; }
+    notePanel = document.createElement("aside"); notePanel.id = "presenter-notes";
+    notePanel.setAttribute("aria-label", "Catatan bersama presenter");
+    notePanel.innerHTML = `<header><strong>Notes · W</strong><button type="button" aria-label="Tutup notes">×</button></header><h3></h3><textarea maxlength="12000" aria-label="Catatan untuk slide ini" placeholder="Tulis catatan berbicara untuk slide ini…"></textarea><p role="status"></p>`;
+    document.body.append(notePanel); noteEditor = notePanel.querySelector("textarea");
+    notePanel.querySelector("button").onclick = closeNotes;
+    noteEditor.oninput = () => {
+      if (!online || role !== "presenter") return;
+      const edit = { text: noteEditor.value, editId: crypto.randomUUID() };
+      pendingNotes.set(noteKey, edit);
+      send({ type: "note", key: noteKey, ...edit });
+      loadNote();
+    };
+    noteEditor.addEventListener("keydown", e => { if (e.key === "Escape") { e.stopPropagation(); closeNotes(); } });
+    loadNote();
+  }
+  setInterval(() => {
+    if (role !== "presenter") closeNotes();
+    else loadNote();
+  }, 100);
   function disconnect() {
+    closeNotes(); sharedNotes = {}; notesReady = false; notesVersion = ""; pendingNotes.clear();
     clearTimeout(retry); online = false; ownsControl = false; mode = "off";
     board.style.pointerEvents = "none";
     if (socket) { socket.onclose = null; socket.close(); socket = null; }
@@ -275,6 +332,9 @@
     if (
       e.target.closest("textarea,select,input:not([type=color]):not([type=range]):not([readonly])")
     ) return;
+    if (e.key.toLowerCase() === "w" && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      e.preventDefault(); e.stopImmediatePropagation(); toggleNotes(); return;
+    }
     if (e.key.toLowerCase() === "s" && !e.ctrlKey && !e.metaKey) {
       e.preventDefault();
       e.stopImmediatePropagation();
@@ -300,7 +360,7 @@
   }, true);
   document.addEventListener("pointerdown", (e) => {
     if (
-      (role !== "local" && !online) && !panel.contains(e.target) && !picker.contains(e.target) &&
+      (role !== "local" && !online) && !panel.contains(e.target) && !picker.contains(e.target) && !e.target.closest("#presenter-notes") &&
       e.target !== badge && !e.target.closest('[data-act="fullscreen"]')
     ) {
       e.preventDefault();
@@ -309,7 +369,7 @@
   }, true);
   document.addEventListener("click", (e) => {
     if (
-      (role !== "local" && !online) && !panel.contains(e.target) && !picker.contains(e.target) &&
+      (role !== "local" && !online) && !panel.contains(e.target) && !picker.contains(e.target) && !e.target.closest("#presenter-notes") &&
       e.target !== badge && !e.target.closest('[data-act="fullscreen"]')
     ) {
       e.stopImmediatePropagation();

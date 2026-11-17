@@ -194,29 +194,59 @@
     ax[4].formulaParts = ["⟨3", R("u"), ",", B("v"), "⟩ = ⟨", R("(3,3)"), ",", B("(1,0)"), "⟩\n= ", R("3"), "×", B("1"), " + ", R("3"), "×", B("0"), " = 3\n= 3⟨", R("u"), ",", B("v"), "⟩"];
     ax[5].formulaParts = ["⟨", R("u,u"), "⟩ = ", R("2"), "² + ", R("1"), "² = 5 > 0"];
     const baseVectors = [V("u", [1,1,0]), V("v", [1,0,0])];
-    const original = S("Homogenitas: hitung hasil awal", "Ambil u=(1,1), v=(1,0), dan skalar k=3. Hitung dahulu hasil kali dalam sebelum ada perkalian dengan 3.", "⟨u,v⟩ = 1×1 + 1×0 = 1", baseVectors, { measure: 1 });
-    original.formulaParts = ["⟨", R("u"), ",", B("v"), "⟩ = ⟨", R("(1,1)"), ",", B("(1,0)"), "⟩\n= ", R("1"), "×", B("1"), " + ", R("1"), "×", B("0"), " = 1"];
     ax[4].heading = "Cara pertama: kalikan vektor u dengan 3";
     ax[4].explain = "Vektor u berubah dari (1,1) menjadi (3,3), sedangkan v tetap. Hitung hasil kali dalam pasangan yang baru.";
     ax[4].formulaParts = ["3", R("u"), " = 3", R("(1,1)"), " = ", R("(3,3)"), "\n⟨3", R("u"), ",", B("v"), "⟩ = ", R("3"), "×", B("1"), " + ", R("3"), "×", B("0"), " = 3"];
     const scaledResult = S("Cara kedua: kalikan hasilnya dengan 3", "Gunakan lagi u=(1,1) dan v=(1,0). Kedua vektor tidak diperbesar. Hasil kali dalam awalnya 1; bilangan itulah yang dikalikan 3.", "3⟨u,v⟩ = 3×1 = 3\n⟨3u,v⟩ = 3⟨u,v⟩", baseVectors, { measure: 3 });
     scaledResult.formulaParts = ["3⟨", R("u"), ",", B("v"), "⟩ = 3[", R("1"), "×", B("1"), " + ", R("1"), "×", B("0"), "]\n= 3×1 = 3\n⟨3", R("u"), ",", B("v"), "⟩ = 3⟨", R("u"), ",", B("v"), "⟩ = 3"];
-    ax.splice(4, 0, original);
-    ax.splice(6, 0, scaledResult);
+    ax.splice(5, 0, scaledResult);
     const failed = S("Contoh operasi yang gagal positivitas", "Sekarang uji operasi lain: F(u,v)=u₁v₁−u₂v₂. Untuk u=(1,2), nilainya negatif. Karena itu, F bukan hasil kali dalam yang sah.", "F(u,u) = 1² − 2² = −3 < 0", [V("u", [1,2,0])], { measure: -3 });
     failed.formulaParts = ["F(", R("u"), ",", B("v"), ") = ", R("u₁"), B("v₁"), " − ", R("u₂"), B("v₂"), "\nF(", R("u,u"), ") = ", R("1"), "² − ", R("2"), "² = −3 < 0\nF bukan hasil kali dalam."];
     ax.push(failed);
-    c[8].steps[0].formulaParts = ["⟨", R("u"), ",", B("v"), "⟩ = 2(", R("1"), ")(", B("2"), ") + (", R("1"), ")(", B("0"), ") + 3(", R("0"), ")(", B("1"), ") = 4"];
-    c[7].intro = "Pada Rⁿ, hasil kali dalam Euclides adalah dot product: jumlah hasil kali komponen yang bersesuaian. Yang dicari adalah nilai ⟨u,v⟩, bukan vektor baru.";
-    c[7].steps.unshift({
-      ...c[7].steps[0], heading: "Apa yang dimaksud Euclides?",
-      explain: "Ruang Euclides Rⁿ memakai koordinat biasa. Untuk dua vektor, aturan hasil kali dalamnya adalah dot product; aturan ini menentukan panjang dan sudut yang biasa digunakan.",
-      formula: "⟨u,v⟩ = u₁v₁ + u₂v₂ + ⋯ + uₙvₙ",
-    });
-    for (const step of c[7].steps) {
-      if (step.formula === "u₁v₁ = 3 × 1 = 3") step.formulaParts = [R("u₁"), B("v₁"), " = ", R("3"), " × ", B("1"), " = 3"];
-      if (step.formula.startsWith("u₂v₂ =")) step.formulaParts = [R("u₂"), B("v₂"), " = ", R("1"), " × ", B("2"), " = 2\n⟨", R("u"), ",", B("v"), "⟩ = 3 + 2 = 5"];
-      if (step.formula.includes("3² + 1²")) step.formulaParts = ["⟨", R("u,u"), "⟩ = ", R("3"), "² + ", R("1"), "² = 10 ≥ 0"];
-    }
+    const symbolic = (id, to, coords) => ({ ...V(id, to), coordinatesText: coords });
+    const su = symbolic("u", [2,1,0], "u₁, u₂, …, uₙ"), sv = symbolic("v", [1,2,0], "v₁, v₂, …, vₙ");
+    c[7] = {
+      title: "Contoh Soal 1: Hasil Kali Dalam Euclides",
+      intro: "Misalkan u, v ∈ Rⁿ. Pada Rⁿ, hasil kali dalam Euclides didefinisikan sebagai berikut.",
+      zoom: 90,
+      steps: [
+        S("Dua vektor pada Rⁿ", "Setiap vektor mempunyai n komponen. Gambar mewakili pasangan vektor secara skematis; komponen pada soal tetap berupa simbol.", "u = (u₁,u₂,…,uₙ)\nv = (v₁,v₂,…,vₙ)", [su,sv]),
+        S("Jumlah hasil kali komponen", "Kalikan komponen yang bersesuaian, kemudian jumlahkan semuanya. Inilah aturan pada Contoh 1 dosen.", "⟨u,v⟩ = u₁v₁ + u₂v₂ + ⋯ + uₙvₙ", [su,sv]),
+        S("Norm pada ruang Euclides", "Hasil kali suatu vektor dengan dirinya merupakan jumlah kuadrat komponennya. Akar dari jumlah tersebut adalah norm.", "⟨u,u⟩ = u₁² + u₂² + ⋯ + uₙ²\n‖u‖ = √⟨u,u⟩ ≥ 0", [su]),
+      ],
+    };
+    const U = symbolic("u", [1,1,0], "u₁, u₂, u₃"), VV = symbolic("v", [2,0,1], "v₁, v₂, v₃"), WW = symbolic("w", [0,1,1], "w₁, w₂, w₃");
+    c[8] = {
+      title: "Contoh Soal 2: Hasil Kali Dalam Berbobot",
+      intro: "Misalnya W ⊆ R³ dilengkapi operasi ⟨u,v⟩ = 2u₁v₁ + u₂v₂ + 3u₃v₃, dengan u,v ∈ W. Buktikan bahwa W adalah ruang hasil kali dalam.",
+      dimension: 3, zoom: 110,
+      steps: [
+        S("Diberikan operasi hasil kali", "Periksa empat aksioma untuk vektor sembarang u, v, w ∈ W dan skalar k ∈ R. Subskrip menyatakan komponen vektor.", "⟨u,v⟩ = 2u₁v₁ + u₂v₂ + 3u₃v₃", [U,VV]),
+        S("Simetris", "Tukar urutan faktor pada setiap perkalian komponen.", "⟨u,v⟩ = 2u₁v₁ + u₂v₂ + 3u₃v₃\n= 2v₁u₁ + v₂u₂ + 3v₃u₃\n= ⟨v,u⟩", [U,VV]),
+        S("Aditivitas: buka tanda kurung", "Terapkan operasi pada pasangan u+v dan w.", "⟨u+v,w⟩\n= 2(u₁+v₁)w₁ + (u₂+v₂)w₂ + 3(u₃+v₃)w₃\n= 2u₁w₁ + 2v₁w₁ + u₂w₂ + v₂w₂\n   + 3u₃w₃ + 3v₃w₃", [U,VV,WW]),
+        S("Aditivitas: kelompokkan suku", "Kelompokkan suku yang memuat u dan suku yang memuat v.", "= (2u₁w₁ + u₂w₂ + 3u₃w₃)\n   + (2v₁w₁ + v₂w₂ + 3v₃w₃)\n= ⟨u,w⟩ + ⟨v,w⟩", [U,VV,WW]),
+        S("Homogenitas", "Keluarkan faktor k dari seluruh penjumlahan.", "⟨ku,v⟩ = 2ku₁v₁ + ku₂v₂ + 3ku₃v₃\n= k(2u₁v₁ + u₂v₂ + 3u₃v₃)\n= k⟨u,v⟩", [symbolic("u", [2,2,0], "ku₁, ku₂, ku₃"),VV]),
+        S("Positivitas", "Semua bobot positif. Jumlah kuadrat ini tidak negatif dan hanya nol jika seluruh komponen u nol.", "⟨u,u⟩ = 2u₁² + u₂² + 3u₃² ≥ 0\n⟨u,u⟩ = 0 ⇔ u₁=u₂=u₃=0 ⇔ u=0", [U]),
+        S("Keempat aksioma terpenuhi", "Operasi yang diberikan merupakan hasil kali dalam. W, sebagai ruang vektor dengan operasi ini, merupakan ruang hasil kali dalam.", "Simetris · Aditivitas · Homogenitas · Positivitas", [U,VV]),
+      ],
+    };
+    c[9] = {
+      title: "Contoh Soal 3: Operasi yang Bukan Hasil Kali Dalam",
+      intro: "Tunjukkan bahwa ⟨u,v⟩ = u₁v₁ + 2u₂v₂ − 3u₃v₃ bukan merupakan hasil kali dalam.",
+      dimension: 3, zoom: 110,
+      steps: [
+        S("Kalikan u dengan dirinya", "Perhatikan bentuk hasil kali suatu vektor dengan dirinya.", "⟨u,u⟩ = u₁² + 2u₂² − 3u₃²", [U]),
+        S("Suku negatif dapat lebih besar", "Jika 3u₃² lebih besar daripada u₁²+2u₂², hasilnya negatif. Ini melanggar positivitas.", "3u₃² > u₁² + 2u₂²\n⇒ ⟨u,u⟩ < 0", [U]),
+        S("Operasi ditolak", "Hasil kali dalam harus memberikan ⟨u,u⟩ ≥ 0 untuk setiap u. Operasi ini tidak memenuhi syarat tersebut.", "Aksioma positivitas tidak terpenuhi.", [U]),
+      ],
+    };
+    c[10].title = "Contoh Soal 4: Vektor Tak Nol, Hasilnya Nol";
+    c[10].steps[0].vectors = [symbolic("u", [1,2,1], "a, b, c")];
+    c[13].title = "Contoh Soal 5: Ortogonal dan Ortonormal";
+    c[15].title = "Contoh Soal 6: Kombinasi Linear";
+    c[18].title = "Contoh Soal 7: Ortonormalisasi pada R³";
+    c[19].title = "Contoh Soal 7: Langkah Ketiga";
+    c[21].title = "Contoh Soal 8: Basis Ortonormal Bidang";
+    c[22].title = "Contoh Soal 8 dan 9: Proyeksi Ortogonal";
   };
 })();

@@ -152,3 +152,26 @@ komputer presenter. Lokal menggunakan `.runtime/shared-v2.sqlite`.
 Pengujian: `node --test tests/vector-math.test.mjs tests/axioms.test.mjs tests/session-protocol.test.mjs`.
 Tes protokol memerlukan server; `ALIN_URL` menentukan alamat, `ALIN_SECOND_URL`
 dapat menunjuk instance kedua dengan database KV yang sama.
+
+## Notes bersama presenter
+
+Pilih Presenter lalu tekan **W** untuk membuka/menutup sticky notes pada slide
+aktif. Saat sedang mengetik, W menjadi huruf biasa; gunakan tombol × atau Escape
+untuk menutup. Setiap perubahan disimpan ke Deno KV, dan status “Tersimpan di server”
+muncul setelah server mengonfirmasi. Semua presenter membaca dan mengedit notes
+yang sama per slide, termasuk presenter yang bergabung kemudian. Host tidak
+menerima pesan notes dan tidak dapat membukanya melalui W.
+
+Notes disimpan terpisah dari keadaan slide dan whiteboard, menggunakan identitas
+slide. Tidak disimpan di localStorage atau dikirim sebagai bagian dari broadcast
+sesi umum. Saat offline, penyuntingan dinonaktifkan. Perubahan yang menunggu
+konfirmasi dikirim ulang saat tersambung; jangan tutup tab sebelum status tersimpan.
+Jika dua presenter mengedit slide yang sama bersamaan, penyimpanan terakhir menang
+(bukan editor penggabung teks serentak). Batas tiap catatan 12.000 karakter.
+
+Pemilihan peran tetap tanpa autentikasi: pembatasan berlaku untuk koneksi berperan
+Host; pengguna yang memilih ulang Presenter memperoleh akses presenter.
+
+Tes: `ALIN_URL=http://localhost:8017 node --test tests/shared-notes.test.mjs`
+(pada Windows, set variabel lingkungan dengan sintaks PowerShell). Jalankan server
+uji dengan ALIN_KV_PATH berbeda agar catatan pengujian tidak masuk sesi produksi.
