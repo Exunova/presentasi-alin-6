@@ -23,6 +23,7 @@ public/styles.css   tampilan
 public/deck.js      navigasi slide
 public/assets/anggota/  foto anggota, sudah dipotong 3:4 (720 x 960)
 docs/ALIN-6 2AB Modif Nj.pdf  materi sumber, tidak ikut disajikan
+docs/transkrip-video-pak-ebang.md  transkrip rekaman video kelas
 ```
 
 Tidak ada dependensi front-end. Semua berkas dilayani dari folder `public/`,

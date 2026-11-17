@@ -25,7 +25,7 @@ public/index.html     all 24 slides, in order
 public/styles.css     styling
 public/deck.js        navigation: keyboard, buttons, swipe, TOC
 public/assets/anggota/*.jpg  member photos, 3:4 (720x960)
-docs/                 source material (PDF), not served
+docs/                 source material (PDF) and video transcript, not served
 ```
 
 `public/` is the deploy artifact. Never put source material or scratch files
