@@ -69,3 +69,15 @@ dengan panjang panah tetap. Sudut pada ilustrasi memakai geometri biasa; sudut
 dan norm secara umum mengikuti aturan hasil kali dalam yang dipilih. Contoh
 komponen kuadran I/II dipindahkan sesudah penjelasan Euclides. Manfaat tetap
 satu slide setelah pengantar. Pemeriksaan browser: tanpa galat atau luapan teks.
+
+
+Revisi aksioma: v=(0,1) tetap berpangkal di asal pada aditivitas. Homogenitas
+menampilkan nilai awal 1, lalu dua cara memperoleh 3: memperbesar u menjadi
+(3,3), atau mempertahankan u=(1,1) dan mengalikan hasil skalar dengan 3.
+Operasi F(u,v)=u1v1-u2v2 diuji pada u=(1,2): F(u,u)=-3, sehingga gagal
+positivitas. Operasi ini diberi label berbeda dari hasil kali dalam yang sah.
+Vektor yang tidak ada pada tahap tujuan dikeluarkan dari interpolasi; vektor
+nol yang memang dibahas tetap ditampilkan. Uji browser animasi normal memastikan
+v tidak berpindah pangkal, w/sum hilang saat tidak dipakai, kedua jalur
+homogenitas benar, serta vektor nol sah tetap terlihat. Semua 120 tahap lolos
+pemeriksaan galat dan luapan vertikal; screenshot homogenitas/penyangkal diperiksa.

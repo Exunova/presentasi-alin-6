@@ -701,6 +701,7 @@
       );
     }
     for (const v of state.vectors) {
+      if ((v.opacity ?? 1) < 0.01) continue;
       const A = project(v.from),
         B = project(v.to),
         dx = B[0] - A[0],
@@ -786,7 +787,7 @@
         }],
       };
     }
-    const keys = new Set([...a.vectors, ...b.vectors].map((v) => v.id));
+    const keys = new Set(b.vectors.map((v) => v.id));
     return {
       ...b,
       ellipsoid: a.ellipsoid && b.ellipsoid ? lerp(a.ellipsoid, b.ellipsoid, t) : b.ellipsoid,
@@ -796,7 +797,7 @@
         return {
           ...model,
           from: lerp(A?.from || model.from, B?.from || model.from, t),
-          to: lerp(A?.to || model.from, B?.to || model.from, t),
+          to: A && B ? lerp(A.to, B.to, t) : model.to,
           opacity: A && B ? 1 : B ? t : 1 - t,
         };
       }),
@@ -882,7 +883,7 @@
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "lab__step";
-      btn.textContent = config.concept ? String(i + 1).padStart(2, "0") : `0${i + 1}`;
+      btn.textContent = String(i + 1).padStart(2, "0");
       btn.setAttribute("aria-label", step.heading);
       lab.querySelector(".lab__steps").append(btn);
       return btn;

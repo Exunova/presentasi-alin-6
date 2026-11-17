@@ -33,11 +33,11 @@
         ),
         S(
           "Aditivitas: jumlah dapat dipisahkan",
-          "Gunakan u=(2,0), v=(0,1), dan w=(1,2). Panah hijau u+v diperoleh dengan menyambung kedua panah.",
+          "Gunakan u=(2,0), v=(0,1), dan w=(1,2). Ketiga vektor tetap berpangkal di titik asal. Panah hijau u+v berujung di (2,1).",
           "u + v = (2,0) + (0,1) = (2,1)\n⟨u+v,w⟩ = ⟨(2,1),(1,2)⟩\n= 2×1 + 1×2 = 4",
           [
             V("u", [2, 0, 0]),
-            V("v", [2, 1, 0], "v", 0, [2, 0, 0]),
+            V("v", [0, 1, 0]),
             V("sum", [2, 1, 0], "u+v", 2),
             V("w", [1, 2, 0]),
           ],
@@ -193,6 +193,19 @@
     ax[3].formulaParts = ["⟨", R("u"), ",", W("w"), "⟩ + ⟨", B("v"), ",", W("w"), "⟩\n= ⟨", R("(2,0)"), ",", W("(1,2)"), "⟩ + ⟨", B("(0,1)"), ",", W("(1,2)"), "⟩\n= (", R("2"), "×", W("1"), " + ", R("0"), "×", W("2"), ") + (", B("0"), "×", W("1"), " + ", B("1"), "×", W("2"), ")\n= 2 + 2 = 4"];
     ax[4].formulaParts = ["⟨3", R("u"), ",", B("v"), "⟩ = ⟨", R("(3,3)"), ",", B("(1,0)"), "⟩\n= ", R("3"), "×", B("1"), " + ", R("3"), "×", B("0"), " = 3\n= 3⟨", R("u"), ",", B("v"), "⟩"];
     ax[5].formulaParts = ["⟨", R("u,u"), "⟩ = ", R("2"), "² + ", R("1"), "² = 5 > 0"];
+    const baseVectors = [V("u", [1,1,0]), V("v", [1,0,0])];
+    const original = S("Homogenitas: hitung hasil awal", "Ambil u=(1,1), v=(1,0), dan skalar k=3. Hitung dahulu hasil kali dalam sebelum ada perkalian dengan 3.", "⟨u,v⟩ = 1×1 + 1×0 = 1", baseVectors, { measure: 1 });
+    original.formulaParts = ["⟨", R("u"), ",", B("v"), "⟩ = ⟨", R("(1,1)"), ",", B("(1,0)"), "⟩\n= ", R("1"), "×", B("1"), " + ", R("1"), "×", B("0"), " = 1"];
+    ax[4].heading = "Cara pertama: kalikan vektor u dengan 3";
+    ax[4].explain = "Vektor u berubah dari (1,1) menjadi (3,3), sedangkan v tetap. Hitung hasil kali dalam pasangan yang baru.";
+    ax[4].formulaParts = ["3", R("u"), " = 3", R("(1,1)"), " = ", R("(3,3)"), "\n⟨3", R("u"), ",", B("v"), "⟩ = ", R("3"), "×", B("1"), " + ", R("3"), "×", B("0"), " = 3"];
+    const scaledResult = S("Cara kedua: kalikan hasilnya dengan 3", "Gunakan lagi u=(1,1) dan v=(1,0). Kedua vektor tidak diperbesar. Hasil kali dalam awalnya 1; bilangan itulah yang dikalikan 3.", "3⟨u,v⟩ = 3×1 = 3\n⟨3u,v⟩ = 3⟨u,v⟩", baseVectors, { measure: 3 });
+    scaledResult.formulaParts = ["3⟨", R("u"), ",", B("v"), "⟩ = 3[", R("1"), "×", B("1"), " + ", R("1"), "×", B("0"), "]\n= 3×1 = 3\n⟨3", R("u"), ",", B("v"), "⟩ = 3⟨", R("u"), ",", B("v"), "⟩ = 3"];
+    ax.splice(4, 0, original);
+    ax.splice(6, 0, scaledResult);
+    const failed = S("Contoh operasi yang gagal positivitas", "Sekarang uji operasi lain: F(u,v)=u₁v₁−u₂v₂. Untuk u=(1,2), nilainya negatif. Karena itu, F bukan hasil kali dalam yang sah.", "F(u,u) = 1² − 2² = −3 < 0", [V("u", [1,2,0])], { measure: -3 });
+    failed.formulaParts = ["F(", R("u"), ",", B("v"), ") = ", R("u₁"), B("v₁"), " − ", R("u₂"), B("v₂"), "\nF(", R("u,u"), ") = ", R("1"), "² − ", R("2"), "² = −3 < 0\nF bukan hasil kali dalam."];
+    ax.push(failed);
     c[8].steps[0].formulaParts = ["⟨", R("u"), ",", B("v"), "⟩ = 2(", R("1"), ")(", B("2"), ") + (", R("1"), ")(", B("0"), ") + 3(", R("0"), ")(", B("1"), ") = 4"];
     c[7].intro = "Pada Rⁿ, hasil kali dalam Euclides adalah dot product: jumlah hasil kali komponen yang bersesuaian. Yang dicari adalah nilai ⟨u,v⟩, bukan vektor baru.";
     c[7].steps.unshift({
