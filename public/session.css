@@ -105,3 +105,7 @@ body:has(#session-panel[open]) #whiteboard {
 #presenter-notes textarea { display: block; width: 100%; min-height: 210px; max-height: 55vh; resize: vertical; box-sizing: border-box; padding: 10px; background: #fffbdf; color: #33280f; border: 1px solid #d8c888; border-radius: 4px; font: 16px/1.6 system-ui; }
 #presenter-notes p { font-size: 12px; margin-bottom: 0; }
 @media print { #presenter-notes { display: none !important; } }
+
+.role-password { display:block; font-size:15px; margin:16px 0; }
+.role-password input { display:block; box-sizing:border-box; width:100%; padding:10px; margin-top:6px; border:1px solid #cbd4e5; border-radius:8px; }
+#role-error { color:#bd2438; font-size:15px; }

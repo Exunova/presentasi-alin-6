@@ -9,6 +9,7 @@
     }, true);
   }
   const sender = crypto.randomUUID();
+  let authToken = "";
   let role = "local",
     socket = null,
     online = false,
@@ -50,10 +51,11 @@
     status.textContent = text;
     badge.textContent = role === "local"
       ? "S · Pengaturan"
-      : `${online ? "●" : "○"} ${role === "host" ? "Host" : "Presenter"} · S`;
+      : `${online ? "●" : "○"} ${role === "host" ? "Host" : role === "guest" ? "Guest" : "Presenter"} · S`;
     badge.dataset.offline = String(!online && role !== "local");
   }
   function send(data) {
+    if (role === "guest") return;
     if (role === "local") {
       localInk(data);
       return;
@@ -127,7 +129,7 @@
       retry = setTimeout(connect, 2500);
       return;
     }
-    socket = new WebSocket(u);
+    socket = role === "guest" ? new WebSocket(u) : new WebSocket(u, ["alin-session", "token." + authToken]);
     socket.onopen = () => {
       online = true;
       revision = -1;
@@ -160,11 +162,11 @@
       if (m.revision < revision) return;
       const sameRevision = m.revision === revision;
       revision = m.revision;
-      members.textContent = `Terhubung: ${m.hosts} host · ${m.presenters} presenter`;
+      members.textContent = `Terhubung: ${m.hosts} host · ${m.presenters} presenter · ${m.guests || 0} guest`;
       if (sameRevision) return;
       ink = m.ink;
       applying = true;
-      if (m.sender !== sender) {
+      if (m.sender !== sender && role !== "guest") {
         ownsControl = false;
         window.deckAPI.set(m.view);
       }
@@ -187,7 +189,7 @@
   const picker = document.createElement("dialog");
   picker.id = "role-picker";
   picker.setAttribute("aria-labelledby", "role-title");
-  picker.innerHTML = `<p class="role-kicker">ALJABAR LINEAR · D4 2B</p><h1 id="role-title">Bergabung ke presentasi</h1><p>Satu presentasi bersama. Pilih peran untuk perangkat ini.</p><div class="role-options"><button data-role="host"><strong>Host</strong><span>Bagikan layar dan kendalikan slide, animasi, serta whiteboard.</span></button><button data-role="presenter"><strong>Presenter</strong><span>Kendalikan slide, animasi, dan whiteboard bersama presenter lain.</span></button></div><p class="role-note">Host dan presenter memiliki kontrol yang sama dalam satu sesi.</p><button id="local-preview">Pratinjau sendiri tanpa sinkronisasi</button>`;
+  picker.innerHTML = `<p class="role-kicker">ALJABAR LINEAR · D4 2B</p><h1 id="role-title">Bergabung ke presentasi</h1><p>Satu presentasi bersama. Pilih peran untuk perangkat ini.</p><div class="role-options"><button data-role="host"><strong>Host</strong><span>Bagikan layar dan kendalikan slide, animasi, serta whiteboard.</span></button><button data-role="presenter"><strong>Presenter</strong><span>Kendalikan slide, animasi, dan whiteboard bersama presenter lain.</span></button><button data-role="guest"><strong>Guest</strong><span>Jelajahi slide sendiri dan lihat coretan. Tidak mengendalikan sesi bersama.</span></button></div><label class="role-password">Password host / presenter<input id="role-password" type="password" autocomplete="current-password"></label><p id="role-error" role="alert"></p><p class="role-note">Host dan presenter memiliki kontrol yang sama dalam satu sesi.</p><button id="local-preview">Pratinjau sendiri tanpa sinkronisasi</button>`;
   document.body.append(picker);
   picker.addEventListener("cancel", e => e.preventDefault());
   const preparation = document.createElement("p");
@@ -299,9 +301,25 @@
     if (socket) { socket.onclose = null; socket.close(); socket = null; }
     window.mathScenes?.sync(null);
   }
-  picker.querySelectorAll("[data-role]").forEach(b => b.onclick = () => {
-    disconnect(); role = b.dataset.role; revision = -1; picker.close();
-    panel.querySelectorAll("[data-mode],[data-ink],#ink-color,#ink-color-2,#ink-width").forEach(x => x.disabled = false);
+  picker.querySelectorAll("[data-role]").forEach(b => b.onclick = async () => {
+    const selected = b.dataset.role;
+    const error = picker.querySelector("#role-error");
+    error.textContent = "";
+    let token = "";
+    if (selected !== "guest") {
+      roleButtons.forEach(button => button.disabled = true);
+      try {
+        const response = await fetch(`/api/session?role=${selected}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ password: picker.querySelector("#role-password").value }) });
+        const result = await response.json();
+        if (!response.ok) { error.textContent = result.error || "Tidak dapat masuk."; return; }
+        token = result.token;
+      } catch { error.textContent = "Server tidak dapat dijangkau."; return; }
+      finally { roleButtons.forEach(button => button.disabled = false); }
+    }
+    disconnect(); authToken = token; role = selected; revision = -1;
+    picker.querySelector("#role-password").value = "";
+    picker.close();
+    panel.querySelectorAll("[data-mode],[data-ink],#ink-color,#ink-color-2,#ink-width").forEach(x => x.disabled = role === "guest");
     connect();
   });
   picker.querySelector("#local-preview").onclick = () => {
@@ -349,8 +367,8 @@
     ];
   };
   board.onpointerdown = (e) => {
-    if (e.button !== 0) return;
-    if (role !== "local" && !online) return;
+    if (e.button !== 0 || role === "guest") return;
+    if (role !== "local" && role !== "guest" && !online) return;
     const p = point(e);
     if (mode === "eraser") {
       const slide = window.deckAPI.get().slide;
@@ -417,7 +435,7 @@
       return;
     }
     if (
-      (role !== "local" && !online) && !["f", "F", "Escape"].includes(e.key)
+      (role !== "local" && role !== "guest" && !online) && !["f", "F", "Escape"].includes(e.key)
     ) {
       e.preventDefault();
       e.stopImmediatePropagation();
@@ -425,7 +443,7 @@
   }, true);
   document.addEventListener("pointerdown", (e) => {
     if (
-      (role !== "local" && !online) && !panel.contains(e.target) && !picker.contains(e.target) && !e.target.closest("#presenter-notes") &&
+      (role !== "local" && role !== "guest" && !online) && !panel.contains(e.target) && !picker.contains(e.target) && !e.target.closest("#presenter-notes") &&
       e.target !== badge && !e.target.closest('[data-act="fullscreen"]')
     ) {
       e.preventDefault();
@@ -434,7 +452,7 @@
   }, true);
   document.addEventListener("click", (e) => {
     if (
-      (role !== "local" && !online) && !panel.contains(e.target) && !picker.contains(e.target) && !e.target.closest("#presenter-notes") &&
+      (role !== "local" && role !== "guest" && !online) && !panel.contains(e.target) && !picker.contains(e.target) && !e.target.closest("#presenter-notes") &&
       e.target !== badge && !e.target.closest('[data-act="fullscreen"]')
     ) {
       e.stopImmediatePropagation();
@@ -446,7 +464,7 @@
     if (v !== last) {
       last = v;
       draw(stroke);
-      if (!applying && ownsControl && role !== "local" && online) {
+      if (!applying && ownsControl && role !== "local" && role !== "guest" && online) {
         send({ type: "view", view: JSON.parse(v) });
       }
     }
