@@ -12,7 +12,7 @@
     concept: "metric",
     title: "Memahami Hasil Kali Dalam",
     intro:
-      "Kita akan membandingkan arah gerak a dengan arah acuan b yang kita pilih. Hasil kali dalam memberi nilai untuk hubungan kedua vektor itu.",
+      "Kita pilih dua vektor a dan b. Pada contoh ini, hasil kali dalam dihitung dengan menjumlahkan hasil kali komponen yang bersesuaian.",
     source: "Ilustrasi Euclides untuk ALIN-6 hlm. 3–5; bukan definisi ulang ruang vektor.",
     application:
       "Grafika 3D: hasil kali dalam arah cahaya dan normal permukaan menentukan kuat pencahayaan pada model Lambert.",
@@ -31,20 +31,20 @@
       ),
       s(
         "Perhatikan bagian a pada arah b",
-        "Tarik garis tegak lurus dari ujung a ke garis b. Ruas hijau adalah bagian mendatar a. Daerah yang diarsir membantu memperlihatkan hubungan panah dengan proyeksinya.",
-        "Yang diamati adalah ruas hijau, bukan luas daerah arsiran.",
+        "Tarik garis tegak lurus dari ujung a ke garis b. Vektor proyeksinya adalah (4,0), dengan nilai bertanda 4. Nilai 4 ini belum merupakan hasil kali dalam.",
+        "Vektor proyeksi: (4,0)\nProyeksi bertanda: 4",
         2,
       ),
       s(
-        "Bagaimana memberi nilai pada hubungan itu?",
-        "Pada contoh ini, panjang proyeksi bertanda a pada arah b dikalikan panjang b. Di sini proyeksinya 4 satuan dan panjang b adalah 2 satuan.",
-        "⟨a,b⟩ = proyeksi bertanda × panjang b",
+        "Hitung dengan komponen kedua vektor",
+        "Kalikan komponen pertama a dengan komponen pertama b, lalu tambahkan hasil kali komponen kedua. Karena komponen kedua b bernilai nol, suku 3 × 0 tidak menambah hasil.",
+        "⟨a,b⟩ = a₁b₁ + a₂b₂\n= (4 × 2) + (3 × 0) = 8",
         3,
       ),
       s(
-        "Hasilnya adalah sebuah bilangan",
-        "Diperoleh 4 × 2 = 8. Nilai positif menunjukkan komponen a searah b. Jika tegak lurus, proyeksinya nol; jika berlawanan, nilainya negatif.",
-        "⟨a,b⟩ = 8; hasilnya bukan vektor baru.",
+        "Mengapa gambar juga memberi hasil 8?",
+        "Ruas hijau bernilai 4 dan panjang b adalah 2. Mengalikan keduanya memberi 8, sama dengan cara komponen. Jadi, 8 adalah hasil kali dalam; bukan panjang proyeksi atau luas segitiga.",
+        "Proyeksi bertanda × panjang b = 4 × 2 = 8",
         4,
       ),
       s(
@@ -62,7 +62,7 @@
     steps: [
       s("Ubah arah gerak a", "Ambil a = (−4,3): 4 satuan ke kiri dan 3 satuan ke atas. Vektor acuan tetap b = (2,0).", "a = (−4,3); b = (2,0)", 1),
       s("Proyeksi mengarah ke kiri", "Tarik tegak lurus dari ujung a ke garis mendatar. Proyeksinya berlawanan arah dengan b, sehingga nilai bertandanya −4.", "proyeksi bertanda = −4; panjang b = 2", 2),
-      s("Kalikan proyeksi bertanda dengan panjang b", "Tanda negatif menunjukkan komponen gerak a melawan arah acuan b.", "⟨a,b⟩ = (−4) × 2 = −8", 3),
+      s("Hitung dengan aturan yang sama", "Komponen kedua b tetap nol. Hasil −8 juga diperoleh dari proyeksi bertanda −4 dikalikan panjang b, yaitu 2.", "⟨a,b⟩ = (−4) × 2 + 3 × 0 = −8", 3),
       s("Bandingkan kedua arah gerak", "Kuadran I tadi memberi 8. Kuadran II ini memberi −8. Acuannya sama; yang berubah adalah arah komponen mendatar a.", "⟨(4,3),(2,0)⟩ = 8\n⟨(−4,3),(2,0)⟩ = −8", 4),
     ],
   }, {
@@ -103,10 +103,10 @@
   const red = text => colored(text, "#c53243"), blue = text => colored(text, "#1f4bff"), green = text => colored(text, "#15804a");
   const positive = globalThis.AlinConcepts[0], negative = globalThis.AlinConcepts[1];
   positive.steps[0].formulaParts = [red("a = (4,3)")];
-  positive.steps[3].formulaParts = ["⟨", red("a"), ",", blue("b"), "⟩ = ", green("4"), " × ", blue("2")];
-  positive.steps[4].formulaParts = ["⟨", red("a"), ",", blue("b"), "⟩ = ", green("4"), " × ", blue("2"), " = 8"];
+  positive.steps[3].formulaParts = ["⟨", red("a"), ",", blue("b"), "⟩ = ", red("a₁"), blue("b₁"), " + ", red("a₂"), blue("b₂"), "\n= (", red("4"), " × ", blue("2"), ") + (", red("3"), " × ", blue("0"), ")\n= 8 + 0 = 8"];
+  positive.steps[4].formulaParts = [green("Proyeksi bertanda"), " × ", blue("panjang b"), "\n= ", green("4"), " × ", blue("2"), " = 8\n", "Hasil kali dalam = 8 ; proyeksi bertanda = 4"];
   negative.steps[0].formulaParts = [red("a = (−4,3)"), "; ", blue("b = (2,0)")];
-  negative.steps[2].formulaParts = ["⟨", red("a"), ",", blue("b"), "⟩ = ", green("(−4)"), " × ", blue("2"), " = −8"];
+  negative.steps[2].formulaParts = ["⟨", red("a"), ",", blue("b"), "⟩ = (", red("−4"), " × ", blue("2"), ") + (", red("3"), " × ", blue("0"), ")\n= −8 + 0 = −8\n", green("Proyeksi bertanda −4"), " × ", blue("panjang b 2"), " = −8"];
   negative.steps[3].formulaParts = ["⟨", red("(4,3)"), ",", blue("(2,0)"), "⟩ = 8\n⟨", red("(−4,3)"), ",", blue("(2,0)"), "⟩ = −8"];
   globalThis.drawAlinConcept = (svg, c, state) => {
     svg.replaceChildren();
@@ -178,7 +178,7 @@
           "Satu vektor: a",
           "Dua vektor: a dan b",
           negative ? "Bagian a yang berlawanan dengan b" : "Bagian a yang searah b",
-          "Proyeksi bertanda × panjang b",
+          "Perkalian komponen yang bersesuaian",
           negative ? "Hasil kali dalam: −8" : "Hasil kali dalam: 8",
           "Ruang + hasil kali dalam yang memenuhi aksioma",
         ][Math.floor(p + 0.00001)],
@@ -203,10 +203,14 @@
       arrow(base, A, negative ? "a = (−4,3)" : "a = (4,3)", "#c53243");
       if (p > 0) arrow(base, [base[0] + 140 * clamp(p), 335], "b = (2,0)", blue);
       if (p >= 1) text(base[0] + 65, 315, "2", 23, blue);
-      if (p >= 3) {
+      if (p >= 3 && p < 4) {
+        text(negative ? 440 : 500, 185, negative ? "(−4) × 2" : "4 × 2", 27, "#15804a");
+        text(negative ? 440 : 500, 225, "+ 3 × 0", 27, ink);
+        text(negative ? 440 : 500, 265, negative ? "= −8" : "= 8", 29, ink);
+      } else if (p >= 4) {
         text(negative ? 450 : 570, 210, negative ? "(−4) ×" : "4 ×", 27, "#15804a");
         text(negative ? 550 : 625, 210, "2", 27, blue);
-        if (p >= 4) text(negative ? 490 : 620, 260, negative ? "= −8" : "= 8", 32, "#15804a");
+        text(negative ? 490 : 620, 260, negative ? "= −8" : "= 8", 32, ink);
       }
       text(
         35,
