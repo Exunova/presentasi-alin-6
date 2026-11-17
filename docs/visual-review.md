@@ -101,3 +101,23 @@ mengabaikan kiriman terlambat. Sebelas tes lulus, deno lint/check lulus.
 ### Draggable presenter notes
 
 Verified in Edge with two presenter pages and one host: header drag changes only the local panel position; shared text still synchronizes; closing/reopening preserves position; dragging to screen edges and resizing to 600 x 450 keeps the panel reachable. Host W and switching presenter to host produce no notes panel. Protocol tests verify hosts never receive notes. All 11 tests, Deno lint, and server type check pass.
+
+### Requested slide 1–8 revision
+
+Cover/member labels and requested text removals applied. Intro has four stages;
+obtuse-angle slide has two. Axioms numbered; failing positivity example uses
+ALIN-6 page 9, Contoh 4, ad+cf and u=(0,2,0), verified against the rendered PDF.
+Norm formula remains unchanged because norm(u)=sqrt(inner(u,u)) is correct.
+One norm-applications slide inserted after norm; total 28 slides. Browser review
+covered 111 interactive states with no script errors or detected vertical overflow.
+Nine math tests, Deno lint, and server type check pass.
+
+Application images are actual browser captures of the runnable local demonstration
+assets/applications/software-demo.html (not screenshots of Blender or another
+third-party product, and not image-generator output). Six examples calculate their
+shown values in JavaScript. This replaces the old generated application artwork
+only on the requested application slide and adds the requested norm slide.
+References for the implemented computations:
+- https://learnopengl.com/Lighting/Basic-Lighting (diffuse lighting dot product)
+- https://scikit-learn.org/stable/modules/generated/sklearn.metrics.pairwise.cosine_similarity.html (normalized dot product)
+- https://numpy.org/doc/stable/reference/generated/numpy.linalg.norm.html (vector norm)

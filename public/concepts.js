@@ -12,7 +12,7 @@
     concept: "metric",
     title: "Memahami Hasil Kali Dalam",
     intro:
-      "Hasil kali dalam menghasilkan nilai skalar dari dua vektor. Nilainya berkaitan dengan panjang dan hubungan arah keduanya. Contoh ini menggunakan hasil kali dalam Euclides.",
+      "",
     source: "Ilustrasi Euclides untuk ALIN-6 hlm. 3–5; bukan definisi ulang ruang vektor.",
     application:
       "Grafika 3D: hasil kali dalam arah cahaya dan normal permukaan menentukan kuat pencahayaan pada model Lambert.",
@@ -26,18 +26,18 @@
       s(
         "Diberikan pula vektor b",
         "Diberikan pula vektor b = (2,0). Kita akan menghitung hasil kali dalam vektor a dan b.",
-        "a merah; b biru. Keduanya berawal pada titik yang sama.",
+        "",
         1,
       ),
       s(
         "Apa yang sebenarnya dicari?",
-        "Yang dicari adalah nilai skalar ⟨a,b⟩, bukan vektor baru. Pada aturan Euclides, nilai ini dipengaruhi panjang kedua vektor dan sudutnya: positif untuk sudut lancip, nol untuk tegak lurus, dan negatif untuk sudut tumpul.",
-        "Dua vektor a dan b → nilai skalar ⟨a,b⟩",
+        "Yang dicari adalah nilai skalar ⟨a,b⟩. Pada aturan Euclides, nilai ini dipengaruhi panjang kedua vektor dan sudutnya:\n• positif untuk sudut lancip;\n• nol untuk tegak lurus;\n• negatif untuk sudut tumpul.",
+        "Vektor a dan b → nilai skalar ⟨a,b⟩",
         2,
       ),
       s(
-        "Hitung dengan komponen kedua vektor",
-        "Kalikan komponen pertama a dengan komponen pertama b, lalu tambahkan hasil kali komponen kedua. Karena komponen kedua b bernilai nol, suku 3 × 0 tidak menambah hasil.",
+        "Hitung tiap komponen vektor",
+        "Kalikan setiap komponen vektor a dengan komponen vektor b yang bersesuaian, kemudian jumlahkan hasil perkaliannya.",
         "⟨a,b⟩ = a₁b₁ + a₂b₂\n= (4 × 2) + (3 × 0) = 8",
         3,
       ),
@@ -58,11 +58,11 @@
     before: 4,
     concept: "metric-negative",
     title: "Hasil Kali Dalam Sudut Tumpul",
-    intro: "Vektor b tetap (2,0). Sekarang diberikan a = (−4,3).",
+    intro: "Diberikan vektor b = (2,0) dan vektor a = (−4,3).",
     steps: [
       s("Ubah arah gerak a", "Ambil a = (−4,3): 4 satuan ke kiri dan 3 satuan ke atas. Vektor b tetap (2,0).", "a = (−4,3); b = (2,0)", 1),
       s("Sudut kedua vektor kini tumpul", "Vektor a mengarah ke kiri atas, sedangkan b tetap ke kanan. Sudut di antara keduanya lebih dari 90°, sehingga hasil kali dalamnya akan negatif.", "Sudut tumpul → hasil kali dalam negatif", 2),
-      s("Hitung dengan aturan yang sama", "Kalikan komponen yang bersesuaian, lalu jumlahkan. Komponen pertama memberi −8 dan komponen kedua memberi 0, sehingga hasil kali dalamnya −8.", "⟨a,b⟩ = (−4) × 2 + 3 × 0 = −8", 3),
+      s("Hitung dengan aturan yang sama", "Kalikan komponen yang bersesuaian, lalu jumlahkan.", "⟨a,b⟩ = (−4) × 2 + 3 × 0 = −8", 3),
       s("Bandingkan kedua arah gerak", "Kuadran I tadi memberi 8. Kuadran II ini memberi −8. Vektor b tetap sama; yang berubah adalah arah komponen mendatar a.", "⟨(4,3),(2,0)⟩ = 8\n⟨(−4,3),(2,0)⟩ = −8", 4),
     ],
   }, {
@@ -108,6 +108,8 @@
   negative.steps[0].formulaParts = [red("a = (−4,3)"), "; ", blue("b = (2,0)")];
   negative.steps[2].formulaParts = ["⟨", red("a"), ",", blue("b"), "⟩ = ", red("a₁"), blue("b₁"), " + ", red("a₂"), blue("b₂"), "\n= (", red("−4"), " × ", blue("2"), ") + (", red("3"), " × ", blue("0"), ")\n= −8 + 0 = −8"];
   negative.steps[3].formulaParts = ["⟨", red("(4,3)"), ",", blue("(2,0)"), "⟩ = 8\n⟨", red("(−4,3)"), ",", blue("(2,0)"), "⟩ = −8"];
+  positive.steps.splice(4, 2);
+  negative.steps.splice(0, 2);
   globalThis.drawAlinConcept = (svg, c, state) => {
     svg.replaceChildren();
     const ns = "http://www.w3.org/2000/svg", blue = "#1f4bff", ink = "#25334c", grey = "#8694ab";

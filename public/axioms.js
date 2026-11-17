@@ -18,7 +18,7 @@
       zoom: 85,
       steps: [
         S(
-          "Simetris: urutan ditukar",
+          "1. Simetris: urutan ditukar",
           "Panah u dan v tetap. Menukar urutan kedua masukan tidak mengubah hasil kali dalam.",
           "⟨u,v⟩ = 2×1 + 1×3 = 5",
           [V("u", [2, 1, 0]), V("v", [1, 3, 0])],
@@ -32,8 +32,8 @@
           { measure: 5 },
         ),
         S(
-          "Aditivitas: jumlah dapat dipisahkan",
-          "Gunakan u=(2,0), v=(0,1), dan w=(1,2). Ketiga vektor tetap berpangkal di titik asal. Panah hijau u+v berujung di (2,1).",
+          "2. Aditivitas: jumlah dapat dipisahkan",
+          "Misalkan u=(2,0), v=(0,1), dan w=(1,2).",
           "u + v = (2,0) + (0,1) = (2,1)\n⟨u+v,w⟩ = ⟨(2,1),(1,2)⟩\n= 2×1 + 1×2 = 4",
           [
             V("u", [2, 0, 0]),
@@ -45,7 +45,7 @@
         ),
         S(
           "Dihitung terpisah, hasilnya juga 4",
-          "Hitung hasil kali masing-masing vektor dengan w, lalu jumlahkan. Inilah arti aditivitas.",
+          "Hitung hasil kali masing-masing vektor dengan w.",
           "⟨u,w⟩ + ⟨v,w⟩\n= ⟨(2,0),(1,2)⟩ + ⟨(0,1),(1,2)⟩\n= (2×1 + 0×2) + (0×1 + 1×2)\n= 2 + 2 = 4",
           [V("u", [2, 0, 0]), V("v", [0, 1, 0]), V("w", [1, 2, 0])],
           { measure: 4 },
@@ -58,8 +58,8 @@
           { measure: 3 },
         ),
         S(
-          "Positivitas: kalikan dengan dirinya",
-          "Untuk u=(2,1), hasil kali u dengan dirinya adalah 5, yaitu kuadrat norm u. Vektor bukan nol harus memberi hasil positif.",
+          "4. Positivitas: kalikan dengan dirinya sendiri",
+          "Untuk u=(2,1), hasil kali u dengan dirinya sendiri adalah 5. Vektor bukan nol harus memberi hasil positif.",
           "⟨u,u⟩ = 2² + 1² = 5 > 0",
           [V("u", [2, 1, 0])],
           { measure: 5 },
@@ -194,14 +194,15 @@
     ax[4].formulaParts = ["⟨3", R("u"), ",", B("v"), "⟩ = ⟨", R("(3,3)"), ",", B("(1,0)"), "⟩\n= ", R("3"), "×", B("1"), " + ", R("3"), "×", B("0"), " = 3\n= 3⟨", R("u"), ",", B("v"), "⟩"];
     ax[5].formulaParts = ["⟨", R("u,u"), "⟩ = ", R("2"), "² + ", R("1"), "² = 5 > 0"];
     const baseVectors = [V("u", [1,1,0]), V("v", [1,0,0])];
-    ax[4].heading = "Homogenitas: vektor u dikalikan 3";
+    ax[4].heading = "3. Homogenitas: pengaruh faktor skalar";
     ax[4].explain = "Vektor u berubah dari (1,1) menjadi (3,3), sedangkan v tetap. Hitung hasil kali dalam pasangan yang baru.";
     ax[4].formulaParts = ["3", R("u"), " = 3", R("(1,1)"), " = ", R("(3,3)"), "\n⟨3", R("u"), ",", B("v"), "⟩ = ", R("3"), "×", B("1"), " + ", R("3"), "×", B("0"), " = 3"];
-    const scaledResult = S("Homogenitas: bandingkan hasilnya", "Untuk u=(1,1) dan v=(1,0), hasil kali dalamnya adalah 1. Jika hasil tersebut dikalikan 3, diperoleh 3, sama dengan hasil ketika vektor u dikalikan 3.", "3⟨u,v⟩ = 3×1 = 3\n⟨3u,v⟩ = 3⟨u,v⟩", baseVectors, { measure: 3 });
+    const scaledResult = S("3. Homogenitas: bandingkan hasilnya", "Untuk u=(1,1) dan v=(1,0), hasil kali dalamnya adalah 1. Jika hasil tersebut dikalikan 3, diperoleh 3, sama dengan hasil ketika vektor u dikalikan 3.", "3⟨u,v⟩ = 3×1 = 3\n⟨3u,v⟩ = 3⟨u,v⟩", baseVectors, { measure: 3 });
     scaledResult.formulaParts = ["3⟨", R("u"), ",", B("v"), "⟩ = 3[", R("1"), "×", B("1"), " + ", R("1"), "×", B("0"), "]\n= 3×1 = 3\n⟨3", R("u"), ",", B("v"), "⟩ = 3⟨", R("u"), ",", B("v"), "⟩ = 3"];
     ax.splice(5, 0, scaledResult);
-    const failed = S("Contoh operasi yang gagal positivitas", "Sekarang uji operasi lain: F(u,v)=u₁v₁−u₂v₂. Untuk u=(1,2), nilainya negatif. Karena itu, F bukan hasil kali dalam yang sah.", "F(u,u) = 1² − 2² = −3 < 0", [V("u", [1,2,0])], { measure: -3 });
-    failed.formulaParts = ["F(", R("u"), ",", B("v"), ") = ", R("u₁"), B("v₁"), " − ", R("u₂"), B("v₂"), "\nF(", R("u,u"), ") = ", R("1"), "² − ", R("2"), "² = −3 < 0\nF bukan hasil kali dalam."];
+    const failed = S("4. Contoh operasi yang gagal positivitas", "Sesuai Contoh 4 dosen, untuk u=(a,b,c) dan v=(d,e,f), diberikan operasi ⟨u,v⟩=ad+cf. Ambil u=(0,2,0). Vektor ini bukan nol, tetapi hasil kali dengan dirinya sendiri adalah nol.", "⟨u,v⟩ = ad + cf\n⟨u,u⟩ = a² + c²\n= 0² + 0² = 0, padahal u ≠ 0", [V("u", [0,2,0])], { measure: 0 });
+    failed.formulaParts = ["⟨", R("u"), ",", B("v"), "⟩ = ", R("a"), B("d"), " + ", R("c"), B("f"), "\n", R("u = (0,2,0)"), " ≠ 0\n⟨", R("u,u"), "⟩ = ", R("0"), "² + ", R("0"), "² = 0\nAksioma positivitas tidak terpenuhi."];
+    failed.vectors[0].coordinatesText = "0, 2, 0";
     ax.push(failed);
     const symbolic = (id, to, coords) => ({ ...V(id, to), coordinatesText: coords });
     const su = symbolic("u", [2,1,0], "u₁, u₂, …, uₙ"), sv = symbolic("v", [1,2,0], "v₁, v₂, …, vₙ");

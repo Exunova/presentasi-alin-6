@@ -902,7 +902,7 @@
     }
     function ui() {
       const s = config.steps[index];
-      lab.querySelector(".lab__intro").hidden = s.explain === config.intro;
+      lab.querySelector(".lab__intro").hidden = !config.intro || s.explain === config.intro;
       lab.querySelector(".lab__heading").textContent = s.heading;
       lab.querySelector(".lab__explain").textContent = s.explain;
       const formula = lab.querySelector(".lab__formula");

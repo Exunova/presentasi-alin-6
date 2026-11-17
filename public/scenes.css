@@ -766,3 +766,5 @@
 
 .slide:not(.is-active){visibility:hidden;transition:none}
 .slide.is-active{transition:opacity .16s ease,transform .16s ease}
+
+[data-scene="concept-metric"] .lab__explain { white-space: pre-line; }
