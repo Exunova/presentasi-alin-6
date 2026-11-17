@@ -93,7 +93,7 @@
         ),
         S(
           "Nilainya −11, bukan kuadrat panjang",
-          "Hasil negatif tidak dapat menjadi kuadrat norm real. Positivitas gagal; satu contoh penyangkal cukup untuk menolak operasi ini.",
+          "Hasil negatif tidak dapat menjadi kuadrat norm real. Positivitas gagal. satu contoh penyangkal cukup untuk menolak operasi ini.",
           "⟨u,u⟩ = 1 + 0 − 12 = −11",
           [V("u", [1, 0, 2])],
           { measure: -11 },
@@ -115,7 +115,7 @@
         S(
           "Pilih u=(0,2,0)",
           "Vektor u hanya mempunyai komponen kedua. Panahnya bukan nol, tetapi operasi tadi tidak menghitung arah ini.",
-          "u ≠ 0; a=0, b=2, c=0",
+          "u ≠ 0. a=0, b=2, c=0",
           [V("u", [0, 2, 0], "u")],
         ),
         S(
@@ -179,7 +179,7 @@
         ),
         S(
           "Norm mengikuti aturan berbobot",
-          "Keempat aksioma terpenuhi. Permukaan norm satu adalah elipsoid; panah menunjukkan tiga ujung vektor yang masing-masing bernorm satu.",
+          "Keempat aksioma terpenuhi. Permukaan norm satu adalah elipsoid. panah menunjukkan tiga ujung vektor yang masing-masing bernorm satu.",
           "‖u‖ = √(2u₁²+u₂²+3u₃²)",
           [V("x", [1 / Math.sqrt(2), 0, 0]), V("y", [0, 1, 0]), V("z", [0, 0, 1 / Math.sqrt(3)])],
           { ellipsoid: [1 / Math.sqrt(2), 1, 1 / Math.sqrt(3)] },
@@ -200,7 +200,7 @@
     const scaledResult = S("3. Homogenitas: bandingkan hasilnya", "Untuk u=(1,1) dan v=(1,0), hasil kali dalamnya adalah 1. Jika hasil tersebut dikalikan 3, diperoleh 3, sama dengan hasil ketika vektor u dikalikan 3.", "3⟨u,v⟩ = 3×1 = 3\n⟨3u,v⟩ = 3⟨u,v⟩", baseVectors, { measure: 3 });
     scaledResult.formulaParts = ["3⟨", R("u"), ",", B("v"), "⟩ = 3[", R("1"), "×", B("1"), " + ", R("1"), "×", B("0"), "]\n= 3×1 = 3\n⟨3", R("u"), ",", B("v"), "⟩ = 3⟨", R("u"), ",", B("v"), "⟩ = 3"];
     ax.splice(5, 0, scaledResult);
-    const failed = S("4. Contoh operasi yang gagal positivitas", "Sesuai Contoh 4 dosen, untuk u=(a,b,c) dan v=(d,e,f), diberikan operasi ⟨u,v⟩=ad+cf. Ambil u=(0,2,0). Vektor ini bukan nol, tetapi hasil kali dengan dirinya sendiri adalah nol.", "⟨u,v⟩ = ad + cf\n⟨u,u⟩ = a² + c²\n= 0² + 0² = 0, padahal u ≠ 0", [V("u", [0,2,0])], { measure: 0 });
+    const failed = S("4. Contoh operasi yang gagal positivitas", "Misalkan u=(a,b,c) dan v=(d,e,f), diberikan operasi ⟨u,v⟩=ad+cf. Ambil u=(0,2,0). Vektor ini bukan nol, tetapi hasil kali dengan dirinya sendiri adalah nol.", "⟨u,v⟩ = ad + cf\n⟨u,u⟩ = a² + c²\n= 0² + 0² = 0, padahal u ≠ 0", [V("u", [0,2,0])], { measure: 0 });
     failed.formulaParts = ["⟨", R("u"), ",", B("v"), "⟩ = ", R("a"), B("d"), " + ", R("c"), B("f"), "\n", R("u = (0,2,0)"), " ≠ 0\n⟨", R("u,u"), "⟩ = ", R("0"), "² + ", R("0"), "² = 0\nAksioma positivitas tidak terpenuhi."];
     failed.vectors[0].coordinatesText = "0, 2, 0";
     ax.push(failed);
@@ -211,7 +211,7 @@
       intro: "Misalkan u, v ∈ Rⁿ. Pada Rⁿ, hasil kali dalam Euclides didefinisikan sebagai berikut.",
       zoom: 90,
       steps: [
-        S("Dua vektor pada Rⁿ", "Setiap vektor mempunyai n komponen. Gambar mewakili pasangan vektor secara skematis; komponen pada soal tetap berupa simbol.", "u = (u₁,u₂,…,uₙ)\nv = (v₁,v₂,…,vₙ)", [su,sv]),
+        S("Dua vektor pada Rⁿ", "Setiap vektor mempunyai n komponen. Gambar mewakili pasangan vektor secara skematis. komponen pada soal tetap berupa simbol.", "u = (u₁,u₂,…,uₙ)\nv = (v₁,v₂,…,vₙ)", [su,sv]),
         S("Jumlah hasil kali komponen", "Kalikan komponen yang bersesuaian, kemudian jumlahkan semuanya. Inilah aturan pada Contoh 1 dosen.", "⟨u,v⟩ = u₁v₁ + u₂v₂ + ⋯ + uₙvₙ", [su,sv]),
         S("Norm pada ruang Euclides", "Hasil kali suatu vektor dengan dirinya merupakan jumlah kuadrat komponennya. Akar dari jumlah tersebut adalah norm.", "⟨u,u⟩ = u₁² + u₂² + ⋯ + uₙ²\n‖u‖ = √⟨u,u⟩ ≥ 0", [su]),
       ],

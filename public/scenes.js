@@ -37,7 +37,7 @@
             : deg < 90
             ? "Sudut lancip: hasilnya positif"
             : "Sudut tumpul: hasilnya negatif",
-          "Vektor u tetap. Vektor v berputar dengan panjang yang sama; yang berubah adalah keselarasan arahnya.",
+          "Vektor u tetap. Vektor v berputar dengan panjang yang sama. yang berubah adalah keselarasan arahnya.",
           `⟨u, v⟩ = ‖u‖ ‖v‖ cos θ\nθ = ${deg}°  →  ⟨u, v⟩ = ${
             deg === 90 ? "0" : deg === 60 ? "2" : "−2"
           }`,
@@ -53,7 +53,7 @@
       title: "Norm dan Jarak",
       intro:
         "Di ruang Euclides, norm adalah panjang panah. Komponen horizontal dan vertikal membentuk segitiga siku-siku.",
-      source: "Definisi norm • PDF halaman 5; ilustrasi turunan (3, 4)",
+      source: "Definisi norm • PDF halaman 5. ilustrasi turunan (3, 4)",
       zoom: 80,
       steps: [
         S(
@@ -128,7 +128,7 @@
         S(
           "Basis tidak harus sejajar sumbu",
           "Basis ortonormal tidak harus sejajar sumbu koordinat. Setiap pasangan vektor berbeda saling ortogonal dan masing-masing memiliki norm satu.",
-          "⟨u,v⟩ = 0; ‖u‖ = ‖v‖ = 1",
+          "⟨u,v⟩ = 0. ‖u‖ = ‖v‖ = 1",
           [
             V("u", [1 / Math.sqrt(2), 1 / Math.sqrt(2), 0], "u", 1),
             V("v", [1 / Math.sqrt(2), -1 / Math.sqrt(2), 0], "v", 2),
@@ -366,7 +366,7 @@
     title: "Hasil Kali Dalam Euclides",
     intro:
       "Misalkan u, v ∈ Rⁿ. Hasil kali dalam Euclides diperoleh dengan menjumlahkan hasil kali komponen yang bersesuaian.",
-    source: "Contoh 1 • PDF halaman 5; ilustrasi perhitungan di R²",
+    source: "Contoh 1 • PDF halaman 5. ilustrasi perhitungan di R²",
     zoom: 95,
     steps: [
       S(
@@ -452,14 +452,14 @@
     steps: [
       S(
         "Himpunan A",
-        "Kedua vektor berlawanan arah. Hasil kali dalamnya tidak nol; A bukan himpunan ortogonal.",
+        "Kedua vektor berlawanan arah. Hasil kali dalamnya tidak nol. A bukan himpunan ortogonal.",
         "A = {(1,0), (−1,0)}\n⟨(1,0),(−1,0)⟩ = −1",
         [V("u", [1, 0, 0], "(1,0)", 1), V("v", [-1, 0, 0], "(−1,0)")],
       ),
       S(
         "Himpunan B",
         "Kedua vektor saling tegak lurus dan masing-masing memiliki norm satu. B merupakan himpunan ortonormal.",
-        "B = {(1,0), (0,−1)}\n⟨u,v⟩ = 0; ‖u‖ = ‖v‖ = 1",
+        "B = {(1,0), (0,−1)}\n⟨u,v⟩ = 0. ‖u‖ = ‖v‖ = 1",
         [V("u", [1, 0, 0], "(1,0)", 1), V("v", [0, -1, 0], "(0,−1)")],
         { circle: true },
       ),
@@ -482,6 +482,17 @@
   const NS = "http://www.w3.org/2000/svg";
   globalThis.AlinNarrative?.(configs);
   globalThis.AlinAxioms?.(configs);
+  configs[6].intro = configs[6].intro.replace(/\bu\b(?!\u0304)/g, "ū");
+  for (const step of configs[6].steps) {
+    for (const key of ["explain", "formula"]) step[key] = step[key].replace(/\bu\b(?!\u0304)/g, "ū");
+    if (step.formulaParts) for (let i = 0; i < step.formulaParts.length; i++) {
+      const token = step.formulaParts[i];
+      if (typeof token === "string") step.formulaParts[i] = token.replace(/\bu\b(?!\u0304)/g, "ū");
+      else token.text = token.text.replace(/\bu\b(?!\u0304)/g, "ū");
+    }
+    for (const vector of step.vectors) vector.label = vector.label.replace(/\bu\b(?!\u0304)/g, "ū");
+    step.note = "ū menyatakan vektor. ‖ū‖ menyatakan norm atau panjang vektor.";
+  }
   const identityColors = {
     w: "#8551ac",
     sum: "#15804a",
@@ -940,6 +951,10 @@
           formula.append(span);
         }
       }
+      let note = lab.querySelector(".lab__notation");
+      if (!note) { note = document.createElement("p"); note.className = "lab__notation"; formula.after(note); }
+      note.textContent = s.note || "";
+      note.hidden = !s.note;
       algebra.replaceChildren();
       for (const v of s.vectors.slice(0, 4)) {
         const item = document.createElement("span");
@@ -958,7 +973,7 @@
         }: (${coordinates.map((x) => Number(x.toFixed(3))).join(", ")})${approx ? " ≈" : ""}`;
         if (v.coordinatesText) item.textContent = `${v.label}: (${v.coordinatesText})`;
         item.title =
-          "Komponen vektor = koordinat ujung − koordinat pangkal. Desimal bertanda ≈ adalah pendekatan; rumus eksak ada di kiri.";
+          "Komponen vektor = koordinat ujung − koordinat pangkal. Desimal bertanda ≈ adalah pendekatan. rumus eksak ada di kiri.";
         algebra.append(item);
       }
       if (config.concept?.startsWith("metric")) {

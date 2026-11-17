@@ -20,12 +20,13 @@
     stroke = null,
     mode = "off",
     color = "#c53243",
+    color2 = "#1f4bff",
     width = 4,
     retry = 0;
   const panel = document.createElement("dialog");
   panel.id = "session-panel";
   panel.innerHTML =
-    `<header><h2>Sesi & Whiteboard</h2><button id="settings-close">Tutup · S</button></header><p id="session-status" role="status">Mode lokal</p><p id="session-members"></p><button id="change-role">Ganti peran</button><label>Alamat presentasi<input id="shared-link" readonly></label><button data-copy="shared-link">Salin alamat</button><p id="network-note"></p><hr><h3>Whiteboard</h3><div class="settings-tools"><button data-mode="off">Navigasi</button><button data-mode="pen">Pena</button><button data-mode="eraser">Penghapus</button><label>Warna <input id="ink-color" type="color" value="#c53243"></label><label>Ketebalan <input id="ink-width" type="range" min="1" max="20" value="4"></label></div><div class="settings-tools"><button data-ink="undo">Undo · Ctrl+Z</button><button data-ink="redo">Redo · Ctrl+Y</button><button data-ink="clear">Hapus coretan slide</button></div><p>Tekan S untuk menutup panel. Coretan disimpan per slide selama sesi aktif.</p>`;
+    `<header><h2>Sesi & Whiteboard</h2><button id="settings-close">Tutup · S</button></header><p id="session-status" role="status">Mode lokal</p><p id="session-members"></p><button id="change-role">Ganti peran</button><label>Alamat presentasi<input id="shared-link" readonly></label><button data-copy="shared-link">Salin alamat</button><p id="network-note"></p><hr><h3>Whiteboard</h3><div class="settings-tools"><button data-mode="off">Navigasi</button><button data-mode="pen">Pena</button><button data-mode="eraser">Penghapus</button><label>Pena 1 · drag kiri <input id="ink-color" type="color" value="#c53243"></label><label>Pena 2 · Ctrl + drag kiri <input id="ink-color-2" type="color" value="#1f4bff"></label><label>Ketebalan <input id="ink-width" type="range" min="1" max="20" value="4"></label></div><div class="settings-tools"><button data-ink="undo">Undo · Ctrl+Z</button><button data-ink="redo">Redo · Ctrl+Y</button><button data-ink="clear">Hapus coretan slide</button></div><p>Tekan S untuk menutup panel. Coretan disimpan per slide selama sesi aktif.</p>`;
   document.body.append(panel);
   const board = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   board.id = "whiteboard";
@@ -62,7 +63,7 @@
   function draw(preview) {
     board.replaceChildren();
     const slide = window.deckAPI.get().slide;
-    for (const s of [...ink, ...(preview ? [preview] : [])]) {
+    for (const s of [...ink, ...(preview && !ink.some(s => s.id === preview.id) ? [preview] : [])]) {
       if (s.slide !== slide) continue;
       const path = document.createElementNS(board.namespaceURI, "polyline");
       path.setAttribute("points", s.points.map((p) => p.join(",")).join(" "));
@@ -285,12 +286,12 @@
   }
   picker.querySelectorAll("[data-role]").forEach(b => b.onclick = () => {
     disconnect(); role = b.dataset.role; revision = -1; picker.close();
-    panel.querySelectorAll("[data-mode],[data-ink],#ink-color,#ink-width").forEach(x => x.disabled = false);
+    panel.querySelectorAll("[data-mode],[data-ink],#ink-color,#ink-color-2,#ink-width").forEach(x => x.disabled = false);
     connect();
   });
   picker.querySelector("#local-preview").onclick = () => {
     disconnect(); role = "local"; picker.close(); setStatus("Pratinjau sendiri — tidak terhubung ke sesi bersama.");
-    panel.querySelectorAll("[data-mode],[data-ink],#ink-color,#ink-width").forEach(x => x.disabled = false);
+    panel.querySelectorAll("[data-mode],[data-ink],#ink-color,#ink-color-2,#ink-width").forEach(x => x.disabled = false);
   };
   panel.querySelector("#change-role").onclick = () => { disconnect(); panel.close(); picker.showModal(); };
   panel.querySelectorAll("[data-copy]").forEach((b) =>
@@ -320,6 +321,7 @@
     }
   );
   panel.querySelector("#ink-color").oninput = (e) => color = e.target.value;
+  panel.querySelector("#ink-color-2").oninput = (e) => color2 = e.target.value;
   panel.querySelector("#ink-width").oninput = (e) => width = Number(e.target.value);
   panel.querySelectorAll("[data-ink]").forEach((b) =>
     b.onclick = () => send({ type: b.dataset.ink })
@@ -332,6 +334,7 @@
     ];
   };
   board.onpointerdown = (e) => {
+    if (e.button !== 0) return;
     if (role !== "local" && !online) return;
     const p = point(e);
     if (mode === "eraser") {
@@ -346,7 +349,7 @@
     board.setPointerCapture(e.pointerId);
     stroke = {
       id: crypto.randomUUID(),
-      color,
+      color: e.ctrlKey ? color2 : color,
       width,
       slide: window.deckAPI.get().slide,
       points: [p],

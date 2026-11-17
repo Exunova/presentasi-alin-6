@@ -13,7 +13,7 @@
     title: "Memahami Hasil Kali Dalam",
     intro:
       "",
-    source: "Ilustrasi Euclides untuk ALIN-6 hlm. 3–5; bukan definisi ulang ruang vektor.",
+    source: "Ilustrasi Euclides untuk ALIN-6 hlm. 3–5. bukan definisi ulang ruang vektor.",
     application:
       "Grafika 3D: hasil kali dalam arah cahaya dan normal permukaan menentukan kuat pencahayaan pada model Lambert.",
     steps: [
@@ -31,7 +31,7 @@
       ),
       s(
         "Apa yang sebenarnya dicari?",
-        "Yang dicari adalah nilai skalar ⟨a,b⟩. Pada aturan Euclides, nilai ini dipengaruhi panjang kedua vektor dan sudutnya:\n• positif untuk sudut lancip;\n• nol untuk tegak lurus;\n• negatif untuk sudut tumpul.",
+        "Yang dicari adalah nilai skalar ⟨a,b⟩. Pada aturan Euclides, nilai ini dipengaruhi panjang kedua vektor dan sudutnya:\n• positif untuk sudut lancip\n• nol untuk tegak lurus\n• negatif untuk sudut tumpul.",
         "Vektor a dan b → nilai skalar ⟨a,b⟩",
         2,
       ),
@@ -43,7 +43,7 @@
       ),
       s(
         "Hasil kali dalam kedua vektor adalah 8",
-        "Hasilnya 8, bernilai positif karena sudut antara a dan b lancip. Besar nilai ini juga dipengaruhi panjang kedua vektor; 8 bukan panjang vektor maupun besar sudut.",
+        "Hasilnya 8, bernilai positif karena sudut antara a dan b lancip. Besar nilai ini juga dipengaruhi panjang kedua vektor. 8 bukan panjang vektor maupun besar sudut.",
         "⟨a,b⟩ = a₁b₁ + a₂b₂\n= (4 × 2) + (3 × 0)\n= 8 + 0 = 8",
         4,
       ),
@@ -60,10 +60,10 @@
     title: "Hasil Kali Dalam Sudut Tumpul",
     intro: "Diberikan vektor b = (2,0) dan vektor a = (−4,3).",
     steps: [
-      s("Ubah arah gerak a", "Ambil a = (−4,3): 4 satuan ke kiri dan 3 satuan ke atas. Vektor b tetap (2,0).", "a = (−4,3); b = (2,0)", 1),
+      s("Ubah arah gerak a", "Ambil a = (−4,3): 4 satuan ke kiri dan 3 satuan ke atas. Vektor b tetap (2,0).", "a = (−4,3). b = (2,0)", 1),
       s("Sudut kedua vektor kini tumpul", "Vektor a mengarah ke kiri atas, sedangkan b tetap ke kanan. Sudut di antara keduanya lebih dari 90°, sehingga hasil kali dalamnya akan negatif.", "Sudut tumpul → hasil kali dalam negatif", 2),
       s("Hitung dengan aturan yang sama", "Kalikan komponen yang bersesuaian, lalu jumlahkan.", "⟨a,b⟩ = (−4) × 2 + 3 × 0 = −8", 3),
-      s("Bandingkan kedua arah gerak", "Kuadran I tadi memberi 8. Kuadran II ini memberi −8. Vektor b tetap sama; yang berubah adalah arah komponen mendatar a.", "⟨(4,3),(2,0)⟩ = 8\n⟨(−4,3),(2,0)⟩ = −8", 4),
+      s("Bandingkan kedua arah gerak", "Kuadran I tadi memberi 8. Kuadran II ini memberi −8. Vektor b tetap sama. Yang berubah adalah arah komponen mendatar a.", "⟨(4,3),(2,0)⟩ = 8\n⟨(−4,3),(2,0)⟩ = −8", 4),
     ],
   }, {
     before: 12,
@@ -102,10 +102,12 @@
   const colored = (text, color) => ({ text, color });
   const red = text => colored(text, "#c53243"), blue = text => colored(text, "#1f4bff"), green = text => colored(text, "#15804a");
   const positive = globalThis.AlinConcepts[0], negative = globalThis.AlinConcepts[1];
+  positive.steps[1].formulaParts = [blue("b = (2,0)")];
+  positive.steps[3].note = "Notasi ⟨a,b⟩ dibaca hasil kali dalam vektor a dan vektor b.";
   positive.steps[0].formulaParts = [red("a = (4,3)")];
   positive.steps[3].formulaParts = ["⟨", red("a"), ",", blue("b"), "⟩ = ", red("a₁"), blue("b₁"), " + ", red("a₂"), blue("b₂"), "\n= (", red("4"), " × ", blue("2"), ") + (", red("3"), " × ", blue("0"), ")\n= 8 + 0 = 8"];
   positive.steps[4].formulaParts = positive.steps[3].formulaParts;
-  negative.steps[0].formulaParts = [red("a = (−4,3)"), "; ", blue("b = (2,0)")];
+  negative.steps[0].formulaParts = [red("a = (−4,3)"), ". ", blue("b = (2,0)")];
   negative.steps[2].formulaParts = ["⟨", red("a"), ",", blue("b"), "⟩ = ", red("a₁"), blue("b₁"), " + ", red("a₂"), blue("b₂"), "\n= (", red("−4"), " × ", blue("2"), ") + (", red("3"), " × ", blue("0"), ")\n= −8 + 0 = −8"];
   negative.steps[3].formulaParts = ["⟨", red("(4,3)"), ",", blue("(2,0)"), "⟩ = 8\n⟨", red("(−4,3)"), ",", blue("(2,0)"), "⟩ = −8"];
   positive.steps.splice(4, 2);

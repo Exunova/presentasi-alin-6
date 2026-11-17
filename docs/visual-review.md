@@ -121,3 +121,24 @@ References for the implemented computations:
 - https://learnopengl.com/Lighting/Basic-Lighting (diffuse lighting dot product)
 - https://scikit-learn.org/stable/modules/generated/sklearn.metrics.pairwise.cosine_similarity.html (normalized dot product)
 - https://numpy.org/doc/stable/reference/generated/numpy.linalg.norm.html (vector norm)
+
+### Official imagery, notation, and two pens
+
+Replaced all six application illustrations with original images downloaded from
+Blender Manual and Godot documentation. Source links appear below each image.
+Blender image originals: https://docs.blender.org/manual/en/latest/_images/
+(render_shader-nodes_utilities_vector_math_example-*).
+Godot originals: https://docs.godotengine.org/en/stable/_images/vector_facing2.png
+and vector_movement1.png. No image generator or custom mock application is used
+on these slides. Blender Manual is CC BY-SA, Godot documentation is CC BY.
+The shown examples are lighting, reflection, facing detection, distance-driven
+textures, velocity magnitude, and normalization using the vector norm.
+
+Norm notation audit: the lecture overbar marks a vector, while double bars mark
+its norm. The slide now shows the overbar and explains both. Other slides use
+plain named vectors and explicit coordinates, a valid alternate vector notation.
+Scalar component indices, inner-product brackets, norm bars, membership signs,
+and orthogonality statements retain their mathematical roles.
+Green notation explanation added below the final introductory calculation.
+Browser traversal found no semicolons in visible presentation text across all
+111 interactive states. Red/blue pens verified with left drag and Ctrl+left drag.

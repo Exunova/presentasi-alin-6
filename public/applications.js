@@ -1,14 +1,14 @@
 (() => {
   const topics = [
     ["concept-metric-negative", "Untuk Apa Hasil Kali Dalam?", [
-      ["light", "Renderer 3D: hasil kali dalam normal permukaan dan arah cahaya menentukan terang permukaan."],
-      ["search", "Pencarian dokumen: hasil kali dalam vektor yang dinormalisasi menentukan skor kemiripan."],
-      ["vision", "Game: hasil kali dalam arah pandang NPC dan arah target memeriksa bidang pandang."],
+      ["light", "Pencahayaan 3D: arah cahaya dibandingkan dengan arah permukaan untuk menentukan terang dan gelap."],
+      ["reflect", "Pantulan cahaya: hasil kali dalam membantu menghitung arah pantulan pada permukaan."],
+      ["vision", "Musuh dalam game: hasil kali dalam dipakai untuk memeriksa apakah pemain berada di depannya."],
     ]],
     ["6", "Untuk Apa Norm?", [
-      ["distance", "Game: norm selisih posisi menghitung jarak pemain ke objek."],
-      ["speed", "Simulasi gerak: norm vektor kecepatan memberikan kelajuan objek."],
-      ["error", "Optimisasi model: norm vektor galat mengukur besar kesalahan prediksi."],
+      ["distance", "Tekstur Blender: jarak dari sebuah titik menentukan perubahan warna pada permukaan."],
+      ["speed", "Gerak dalam game: norm vektor kecepatan menentukan seberapa cepat karakter bergerak."],
+      ["normalize", "Arah pada shader: vektor dibagi normnya agar panjangnya menjadi satu tanpa mengubah arah."],
     ]],
   ];
   for (const [after, title, examples] of topics) {
@@ -30,11 +30,18 @@
       const media = document.createElement("div");
       media.className = "application-image";
       const img = document.createElement("img");
-      img.src = `assets/applications/capture-${name}.png`;
-      img.alt = `Tangkapan layar demonstrasi perangkat lunak: ${description}`;
+      img.src = `assets/applications/source-${name}.png`;
+      img.alt = `Gambar dokumentasi resmi: ${description}`;
       media.append(img);
       const caption = document.createElement("figcaption");
       caption.textContent = description;
+      const credit = document.createElement("a");
+      credit.className = "application-credit";
+      const godot = ["vision", "speed"].includes(name);
+      credit.textContent = godot ? "Sumber: dokumentasi Godot" : "Sumber: Blender Manual";
+      credit.href = godot ? "https://docs.godotengine.org/en/stable/tutorials/math/vector_math.html" : "https://docs.blender.org/manual/en/latest/render/shader_nodes/utilities/vector/vector_math.html";
+      credit.target = "_blank"; credit.rel = "noopener";
+      caption.append(credit);
       card.append(media, caption);
       grid.append(card);
     });
