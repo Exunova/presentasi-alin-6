@@ -8,9 +8,9 @@
     vectors: [],
   });
   globalThis.AlinConcepts = [{
-    before: 4,
+    before: 8,
     concept: "metric",
-    title: "Memahami Hasil Kali Dalam",
+    title: "Euclides: Contoh di Kuadran I",
     intro:
       "Kita pilih dua vektor a dan b. Pada contoh ini, hasil kali dalam dihitung dengan menjumlahkan hasil kali komponen yang bersesuaian.",
     source: "Ilustrasi Euclides untuk ALIN-6 hlm. 3–5; bukan definisi ulang ruang vektor.",
@@ -55,9 +55,9 @@
       ),
     ],
   }, {
-    before: 4,
+    before: 8,
     concept: "metric-negative",
-    title: "Hasil Kali Dalam di Kuadran II",
+    title: "Euclides: Contoh di Kuadran II",
     intro: "Arah acuan b tetap ke kanan. Sekarang a bergerak ke kiri dan ke atas.",
     steps: [
       s("Ubah arah gerak a", "Ambil a = (−4,3): 4 satuan ke kiri dan 3 satuan ke atas. Vektor acuan tetap b = (2,0).", "a = (−4,3); b = (2,0)", 1),
@@ -108,6 +108,27 @@
   negative.steps[0].formulaParts = [red("a = (−4,3)"), "; ", blue("b = (2,0)")];
   negative.steps[2].formulaParts = ["⟨", red("a"), ",", blue("b"), "⟩ = ", red("a₁"), blue("b₁"), " + ", red("a₂"), blue("b₂"), "\n= (", red("−4"), " × ", blue("2"), ") + (", red("3"), " × ", blue("0"), ")\n= −8 + 0 = −8"];
   negative.steps[3].formulaParts = ["⟨", red("(4,3)"), ",", blue("(2,0)"), "⟩ = 8\n⟨", red("(−4,3)"), ",", blue("(2,0)"), "⟩ = −8"];
+  // Retain the numerical examples under Euclides; the opening explains meaning only.
+  positive.intro = "Gunakan aturan hasil kali dalam Euclides untuk a = (4,3) dan b = (2,0).";
+  positive.steps = [
+    s("Diketahui dua vektor", "Vektor a = (4,3) dan b = (2,0). Yang dicari adalah nilai hasil kali dalam ⟨a,b⟩.", "a = (4,3); b = (2,0)", 1),
+    positive.steps[3],
+    { ...positive.steps[4], heading: "Nilai positif: sudutnya lancip", explain: "Hasil kali dalamnya 8. Kedua vektor membentuk sudut lancip. Nilai ini juga dipengaruhi panjang kedua vektor." },
+  ];
+  negative.steps = [negative.steps[0], negative.steps[2], negative.steps[3]];
+  globalThis.AlinConcepts.unshift({
+    before: 4,
+    concept: "meaning",
+    title: "Memahami Hasil Kali Dalam",
+    intro: "Hasil kali dalam adalah aturan yang memasangkan dua vektor dengan suatu bilangan real. Nilainya mencerminkan panjang dan hubungan arah menurut aturan tersebut.",
+    steps: [
+      s("Masukannya dua vektor", "Misalkan a adalah arah gerak dan b arah acuan yang kita pilih. Kita ingin menilai hubungan keduanya. Hasil kali dalam menerima kedua vektor itu sebagai masukan.", "Dua vektor a dan b → hasil kali dalam → nilai skalar", 0),
+      s("Apa arti nilai yang positif?", "Pada gambar, kedua panah membentuk sudut lancip. Hasil kali dalamnya positif. Besar nilainya dipengaruhi panjang kedua vektor dan sudut di antaranya.", "Sudut lancip → hasil kali dalam positif", 1),
+      s("Apa arti nilai nol?", "Putar a hingga tegak lurus b. Hasil kali dalamnya menjadi nol meskipun kedua vektornya tidak nol. Hubungan ini disebut ortogonal.", "Tegak lurus → hasil kali dalam nol", 2),
+      s("Apa arti nilai yang negatif?", "Putar a melewati posisi tegak lurus. Sudutnya kini tumpul, sehingga hasil kali dalamnya negatif. Komponen gerak a berlawanan dengan arah acuan b.", "Sudut tumpul → hasil kali dalam negatif", 3),
+      s("Dari aturan pengukuran menjadi RHD", "Tidak setiap operasi pada dua vektor merupakan hasil kali dalam: ada empat aksioma yang harus dipenuhi. Ruang vektor yang dilengkapi aturan itu disebut ruang hasil kali dalam.", "Aturan hasil kali dalam menentukan norm, sudut, dan ortogonalitas.", 4),
+    ],
+  });
   globalThis.drawAlinConcept = (svg, c, state) => {
     svg.replaceChildren();
     const ns = "http://www.w3.org/2000/svg", blue = "#1f4bff", ink = "#25334c", grey = "#8694ab";
@@ -168,6 +189,26 @@
     };
     const square = (x, y) =>
       n("path", { d: `M${x + 16},${y} v-16 h-16`, stroke: ink, "stroke-width": 2, fill: "none" });
+    if (c.concept === "meaning") {
+      const angle = (30 + 60 * clamp(p - 1) + 45 * clamp(p - 2)) * Math.PI / 180;
+      const base = [350, 330], len = 180;
+      const end = [base[0] + len * Math.cos(angle), base[1] - len * Math.sin(angle)];
+      line([100, 330], [670, 330], "#d9e1ee", 1.5);
+      line([350, 80], [350, 395], "#d9e1ee", 1.5);
+      text(330, 355, "0", 17, grey);
+      text(675, 335, "x", 17, grey);
+      text(360, 85, "y", 17, grey);
+      arrow(base, [530, 330], "b = (1,0)", blue);
+      arrow(base, end, `a ≈ (${Number(Math.cos(angle).toFixed(2))},${Number(Math.sin(angle).toFixed(2))})`, "#c53243");
+      const radius = 55, arcEnd = [base[0] + radius * Math.cos(angle), base[1] - radius * Math.sin(angle)];
+      n("path", { d: `M${base[0]+radius},${base[1]} A${radius},${radius} 0 0 0 ${arcEnd}`, fill: "none", stroke: "#15804a", "stroke-width": 3 });
+      text(435, 290, `${Math.round(angle * 180 / Math.PI)}°`, 21, "#15804a");
+      const labels = ["Dua vektor → nilai skalar", "Hasil kali dalam positif", "Hasil kali dalam nol", "Hasil kali dalam negatif", "Panjang dan sudut mengikuti aturan hasil kali dalam"];
+      text(30, 40, p > 1 && p < 4 ? (angle < Math.PI / 2 - 0.001 ? labels[1] : angle > Math.PI / 2 + 0.001 ? labels[3] : labels[2]) : labels[Math.floor(p)], p >= 4 ? 20 : 23);
+      if (p >= 1 && p < 4) text(530, 140, angle < Math.PI / 2 - 0.001 ? "> 0" : angle > Math.PI / 2 + 0.001 ? "< 0" : "= 0", 37, "#15804a");
+      if (Math.abs(angle - Math.PI / 2) < 0.001) square(...base);
+      return;
+    }
     if (c.concept.startsWith("metric")) {
       const negative = c.concept === "metric-negative";
       const t = clamp(p - 1), base = [negative ? 420 : 160, 335], A = [negative ? 140 : 440, 125], F = [A[0], 335];

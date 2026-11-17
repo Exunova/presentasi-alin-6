@@ -61,3 +61,11 @@ membahas dot product. Pengantar singkat Euclides ditempatkan pada bagiannya send
 116 tahap diperiksa tanpa galat JS atau luapan vertikal. Sepuluh tes matematika/
 protokol lolos. UI diuji dengan 2 host + 2 presenter termasuk host menggambar
 serta menggerakkan slide, pergantian peran, dan pemulihan setelah reload.
+
+
+Pengantar makna dipisahkan dari perhitungan: 28 slide, 117 tahap. Slide 4
+menunjukkan dua vektor sebagai masukan, hasil skalar, dan arti positif/nol/negatif
+dengan panjang panah tetap. Sudut pada ilustrasi memakai geometri biasa; sudut
+dan norm secara umum mengikuti aturan hasil kali dalam yang dipilih. Contoh
+komponen kuadran I/II dipindahkan sesudah penjelasan Euclides. Manfaat tetap
+satu slide setelah pengantar. Pemeriksaan browser: tanpa galat atau luapan teks.

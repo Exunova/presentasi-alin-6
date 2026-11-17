@@ -1,6 +1,6 @@
 (() => {
   const topics = [
-    ["concept-metric-negative", "Untuk Apa Hasil Kali Dalam?", [
+    ["concept-meaning", "Untuk Apa Hasil Kali Dalam?", [
       "Grafika 3D: arah cahaya dan normal permukaan menentukan terang permukaan.",
       "Simulator penerbangan: proyeksi ke arah depan menghitung kecepatan maju.",
       "Navigasi robot: proyeksi posisi ke jalur mengukur penyimpangan dari lintasan.",

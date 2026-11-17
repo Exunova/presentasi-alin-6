@@ -125,7 +125,7 @@ secara bertahap, proyeksi yang disorot, dan arti hasilnya. Aljabar dan koordinat
 di bawah diagram mengikuti warna vektornya. Ilustrasi aplikasi baru muncul
 pada akhir penjelasan; animasi aplikasi menghormati reduced motion.
 
-## Satu alamat, banyak host dan presenter (27 slide)
+## Satu alamat, banyak host dan presenter (28 slide)
 
 Buka alamat situs yang sama, lalu pilih **Host** atau **Presenter**. Semua perangkat
 masuk ke satu sesi bersama; tidak ada kode ruang, tautan per peran, atau host utama.
