@@ -42,9 +42,9 @@
         3,
       ),
       s(
-        "Mengapa gambar juga memberi hasil 8?",
-        "Ruas hijau bernilai 4 dan panjang b adalah 2. Mengalikan keduanya memberi 8, sama dengan cara komponen. Jadi, 8 adalah hasil kali dalam; bukan panjang proyeksi atau luas segitiga.",
-        "Proyeksi bertanda × panjang b = 4 × 2 = 8",
+        "Hasil kali dalam kedua vektor adalah 8",
+        "Hasil kali komponen pertama adalah 8, sedangkan hasil kali komponen kedua adalah 0. Jumlahnya 8. Inilah nilai hasil kali dalam kedua vektor; bukan vektor baru atau luas segitiga.",
+        "⟨a,b⟩ = a₁b₁ + a₂b₂\n= (4 × 2) + (3 × 0)\n= 8 + 0 = 8",
         4,
       ),
       s(
@@ -62,7 +62,7 @@
     steps: [
       s("Ubah arah gerak a", "Ambil a = (−4,3): 4 satuan ke kiri dan 3 satuan ke atas. Vektor acuan tetap b = (2,0).", "a = (−4,3); b = (2,0)", 1),
       s("Proyeksi mengarah ke kiri", "Tarik tegak lurus dari ujung a ke garis mendatar. Proyeksinya berlawanan arah dengan b, sehingga nilai bertandanya −4.", "proyeksi bertanda = −4; panjang b = 2", 2),
-      s("Hitung dengan aturan yang sama", "Komponen kedua b tetap nol. Hasil −8 juga diperoleh dari proyeksi bertanda −4 dikalikan panjang b, yaitu 2.", "⟨a,b⟩ = (−4) × 2 + 3 × 0 = −8", 3),
+      s("Hitung dengan aturan yang sama", "Kalikan komponen yang bersesuaian, lalu jumlahkan. Komponen pertama memberi −8 dan komponen kedua memberi 0, sehingga hasil kali dalamnya −8.", "⟨a,b⟩ = (−4) × 2 + 3 × 0 = −8", 3),
       s("Bandingkan kedua arah gerak", "Kuadran I tadi memberi 8. Kuadran II ini memberi −8. Acuannya sama; yang berubah adalah arah komponen mendatar a.", "⟨(4,3),(2,0)⟩ = 8\n⟨(−4,3),(2,0)⟩ = −8", 4),
     ],
   }, {
@@ -104,9 +104,9 @@
   const positive = globalThis.AlinConcepts[0], negative = globalThis.AlinConcepts[1];
   positive.steps[0].formulaParts = [red("a = (4,3)")];
   positive.steps[3].formulaParts = ["⟨", red("a"), ",", blue("b"), "⟩ = ", red("a₁"), blue("b₁"), " + ", red("a₂"), blue("b₂"), "\n= (", red("4"), " × ", blue("2"), ") + (", red("3"), " × ", blue("0"), ")\n= 8 + 0 = 8"];
-  positive.steps[4].formulaParts = [green("Proyeksi bertanda"), " × ", blue("panjang b"), "\n= ", green("4"), " × ", blue("2"), " = 8\n", "Hasil kali dalam = 8 ; proyeksi bertanda = 4"];
+  positive.steps[4].formulaParts = positive.steps[3].formulaParts;
   negative.steps[0].formulaParts = [red("a = (−4,3)"), "; ", blue("b = (2,0)")];
-  negative.steps[2].formulaParts = ["⟨", red("a"), ",", blue("b"), "⟩ = (", red("−4"), " × ", blue("2"), ") + (", red("3"), " × ", blue("0"), ")\n= −8 + 0 = −8\n", green("Proyeksi bertanda −4"), " × ", blue("panjang b 2"), " = −8"];
+  negative.steps[2].formulaParts = ["⟨", red("a"), ",", blue("b"), "⟩ = ", red("a₁"), blue("b₁"), " + ", red("a₂"), blue("b₂"), "\n= (", red("−4"), " × ", blue("2"), ") + (", red("3"), " × ", blue("0"), ")\n= −8 + 0 = −8"];
   negative.steps[3].formulaParts = ["⟨", red("(4,3)"), ",", blue("(2,0)"), "⟩ = 8\n⟨", red("(−4,3)"), ",", blue("(2,0)"), "⟩ = −8"];
   globalThis.drawAlinConcept = (svg, c, state) => {
     svg.replaceChildren();
@@ -203,14 +203,10 @@
       arrow(base, A, negative ? "a = (−4,3)" : "a = (4,3)", "#c53243");
       if (p > 0) arrow(base, [base[0] + 140 * clamp(p), 335], "b = (2,0)", blue);
       if (p >= 1) text(base[0] + 65, 315, "2", 23, blue);
-      if (p >= 3 && p < 4) {
+      if (p >= 3) {
         text(negative ? 440 : 500, 185, negative ? "(−4) × 2" : "4 × 2", 27, "#15804a");
         text(negative ? 440 : 500, 225, "+ 3 × 0", 27, ink);
         text(negative ? 440 : 500, 265, negative ? "= −8" : "= 8", 29, ink);
-      } else if (p >= 4) {
-        text(negative ? 450 : 570, 210, negative ? "(−4) ×" : "4 ×", 27, "#15804a");
-        text(negative ? 550 : 625, 210, "2", 27, blue);
-        text(negative ? 490 : 620, 260, negative ? "= −8" : "= 8", 32, ink);
       }
       text(
         35,
