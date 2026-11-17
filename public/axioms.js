@@ -253,6 +253,9 @@
     }
     c[5].intro = "Untuk setiap u, v, w ∈ V dan setiap skalar k ∈ R, hasil kali dalam memenuhi empat aksioma berikut.";
     c[8].steps.unshift(S("Asumsi ruang vektor", "Pada contoh ini, W dipahami sebagai ruang vektor bagian dari R³. Yang kita periksa adalah apakah operasi yang diberikan memenuhi aksioma hasil kali dalam.", "W merupakan ruang vektor bagian dari R³", []));
+    failed.formulaParts = ["⟨", R("u"), ",", B("v"), "⟩ = ", R("a"), B("d"), " + 0", R("b"), B("e"), " + ", R("c"), B("f"), "\n", R("u = (0,2,0)"), " ≠ 0\n⟨", R("u,u"), "⟩ = ", R("0"), "² + 0×", R("2"), "² + ", R("0"), "² = 0\nAksioma positivitas tidak terpenuhi."];
+    c[10].steps[0].formula = "⟨u,v⟩ = ad + 0be + cf\n⟨u,u⟩ = a² + 0b² + c²";
+    c[10].steps[2].formula = "⟨u,u⟩ = 0² + 0×2² + 0² = 0";
     c[10].title = "Contoh Soal 4: Vektor Tak Nol, Hasilnya Nol";
     c[10].steps[0].vectors = [symbolic("u", [1,2,1], "a, b, c")];
     c[13].title = "Contoh Soal 5: Ortogonal dan Ortonormal";

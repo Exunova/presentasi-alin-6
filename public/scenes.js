@@ -494,6 +494,8 @@
   configs[17].steps.splice(firstProjection, 0, S("Normalisasikan vektor pertama", "Bagi c₁ dengan normnya untuk memperoleh arah pertama yang bernorm satu.", "c₁ = (2,0), ‖c₁‖ = 2\nw₁ = c₁ / ‖c₁‖ = (1,0)", [V("w1", [1,0,0], "w₁")]));
   configs[22].steps.push(S("Periksa hasil proyeksi", "p merupakan kombinasi linear a dan b, sehingga berada di W. Sisa r tegak lurus terhadap kedua vektor basis, sehingga tegak lurus W.", "p = ⅔a + ⅔b = (⅔,⅔,⁴⁄₃) ∈ W\nr = (⅓,⅓,−⅓)\n⟨r,a⟩ = ⅓ + 0 − ⅓ = 0\n⟨r,b⟩ = 0 + ⅓ − ⅓ = 0", [V("x", x, "x", 2), V("p", p, "p"), V("r", x, "r", 1, p)], { plane }));
 
+  configs[6].steps.at(-1).heading = "Hasil";
+  configs[6].steps.at(-1).explain = "";
   configs[6].intro = configs[6].intro.replace(/\bu\b(?!\u0304)/g, "ū");
   for (const step of configs[6].steps) {
     for (const key of ["explain", "formula"]) step[key] = step[key].replace(/\bu\b(?!\u0304)/g, "ū");
@@ -966,8 +968,8 @@
       }
       let note = lab.querySelector(".lab__notation");
       if (!note) { note = document.createElement("p"); note.className = "lab__notation"; formula.after(note); }
-      note.textContent = s.note || "";
-      note.hidden = !s.note;
+      note.textContent = "";
+      note.hidden = true;
       algebra.replaceChildren();
       for (const v of s.vectors.slice(0, 4)) {
         const item = document.createElement("span");
