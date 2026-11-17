@@ -63,7 +63,7 @@
       s("Ubah arah gerak a", "Ambil a = (−4,3): 4 satuan ke kiri dan 3 satuan ke atas. Vektor b tetap (2,0).", "a = (−4,3). b = (2,0)", 1),
       s("Sudut kedua vektor kini tumpul", "Vektor a mengarah ke kiri atas, sedangkan b tetap ke kanan. Sudut di antara keduanya lebih dari 90°, sehingga hasil kali dalamnya akan negatif.", "Sudut tumpul → hasil kali dalam negatif", 2),
       s("Hitung dengan aturan yang sama", "Kalikan komponen yang bersesuaian, lalu jumlahkan.", "⟨a,b⟩ = (−4) × 2 + 3 × 0 = −8", 3),
-      s("Bandingkan kedua arah gerak", "Kuadran I tadi memberi 8. Kuadran II ini memberi −8. Vektor b tetap sama. Yang berubah adalah arah komponen mendatar a.", "⟨(4,3),(2,0)⟩ = 8\n⟨(−4,3),(2,0)⟩ = −8", 4),
+      s("Bandingkan kedua arah gerak", "Saat sudut antara a dan b lancip, hasil kali dalamnya 8. Saat sudutnya tumpul, hasilnya −8. Vektor b tetap sama, sedangkan arah vektor a berubah.", "⟨(4,3),(2,0)⟩ = 8\n⟨(−4,3),(2,0)⟩ = −8", 4),
     ],
   }, {
     before: 12,
