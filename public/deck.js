@@ -1,18 +1,30 @@
-// Navigasi presentasi: papan ketik, tombol, geser, dan daftar isi.
+// Navigasi presentasi: papan ketik, tombol, geser, daftar isi, layar penuh.
 const slides = Array.from(document.querySelectorAll(".slide"));
 const fill = document.querySelector(".hud__fill");
 const count = document.querySelector(".hud__count");
 const toc = document.querySelector(".toc");
 const tocGrid = document.querySelector(".toc__grid");
+const deck = document.querySelector("#deck");
+const hudRow = document.querySelector(".hud__row");
+
+const PANGGUNG_LEBAR = 1600;
+const PANGGUNG_TINGGI = 900;
 
 let current = 0;
+let sentuhX = 0;
+let sentuhY = 0;
 
 function tampilkan(index) {
   current = Math.max(0, Math.min(index, slides.length - 1));
-  slides.forEach((slide, i) => slide.classList.toggle("is-active", i === current));
+
+  slides.forEach((slide, i) => {
+    const aktif = i === current;
+    slide.classList.toggle("is-active", aktif);
+    slide.setAttribute("aria-hidden", aktif ? "false" : "true");
+  });
 
   fill.style.width = `${((current + 1) / slides.length) * 100}%`;
-  count.innerHTML = `<b>${current + 1}</b>&thinsp;/&thinsp;${slides.length}`;
+  count.innerHTML = `<b>${String(current + 1).padStart(2, "0")}</b><span>/</span>${String(slides.length).padStart(2, "0")}`;
   document.title = `${slides[current].dataset.title} | Aljabar Linear Pertemuan 6`;
 
   history.replaceState(null, "", `#${current + 1}`);
@@ -64,6 +76,28 @@ function tandaiDaftarIsi() {
   });
 }
 
+function ukurPanggung() {
+  const tinggiTersedia = window.innerHeight - hudRow.offsetHeight;
+  const skala = Math.min(
+    window.innerWidth / PANGGUNG_LEBAR,
+    tinggiTersedia / PANGGUNG_TINGGI,
+  );
+  deck.style.top = `${tinggiTersedia / 2}px`;
+  deck.style.setProperty("--scale", String(skala));
+}
+
+async function alihkanLayarPenuh() {
+  try {
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+    } else {
+      await document.documentElement.requestFullscreen();
+    }
+  } catch {
+    // Browser menolak mode layar penuh; tidak ada yang perlu dilakukan.
+  }
+}
+
 slides.forEach((slide, i) => {
   const tombol = document.createElement("button");
   tombol.className = "toc__item";
@@ -82,11 +116,17 @@ document.addEventListener("keydown", (event) => {
   const k = event.key;
 
   if (k === "Escape") {
-    tutupDaftarIsi();
+    if (!toc.hidden) tutupDaftarIsi();
     return;
   }
-  if (k === "t" || k === "T") {
+  if (k === "t" || k === "T" || k === "o" || k === "O") {
+    event.preventDefault();
     toc.hidden ? bukaDaftarIsi() : tutupDaftarIsi();
+    return;
+  }
+  if (k === "f" || k === "F") {
+    event.preventDefault();
+    alihkanLayarPenuh();
     return;
   }
 
@@ -97,8 +137,10 @@ document.addEventListener("keydown", (event) => {
     event.preventDefault();
     mundur();
   } else if (k === "Home") {
+    event.preventDefault();
     tampilkan(0);
   } else if (k === "End") {
+    event.preventDefault();
     tampilkan(slides.length - 1);
     tampilSemua(slides[current]);
   }
@@ -110,6 +152,7 @@ document.querySelectorAll("[data-act]").forEach((tombol) => {
     if (aksi === "next") maju();
     if (aksi === "prev") mundur();
     if (aksi === "toc") (toc.hidden ? bukaDaftarIsi() : tutupDaftarIsi());
+    if (aksi === "fullscreen") alihkanLayarPenuh();
   });
 });
 
@@ -117,15 +160,16 @@ toc.addEventListener("click", (event) => {
   if (event.target === toc) tutupDaftarIsi();
 });
 
-let sentuhX = 0;
 document.addEventListener("touchstart", (event) => {
   sentuhX = event.changedTouches[0].clientX;
+  sentuhY = event.changedTouches[0].clientY;
 }, { passive: true });
 
 document.addEventListener("touchend", (event) => {
-  const selisih = event.changedTouches[0].clientX - sentuhX;
-  if (Math.abs(selisih) < 60) return;
-  selisih < 0 ? maju() : mundur();
+  const selisihX = event.changedTouches[0].clientX - sentuhX;
+  const selisihY = event.changedTouches[0].clientY - sentuhY;
+  if (Math.abs(selisihX) < 60 || Math.abs(selisihX) < Math.abs(selisihY)) return;
+  selisihX < 0 ? maju() : mundur();
 }, { passive: true });
 
 window.addEventListener("hashchange", () => {
@@ -133,5 +177,11 @@ window.addEventListener("hashchange", () => {
   if (nomor >= 1 && nomor <= slides.length && nomor - 1 !== current) tampilkan(nomor - 1);
 });
 
+ukurPanggung();
+window.addEventListener("resize", ukurPanggung);
+window.addEventListener("fullscreenchange", ukurPanggung);
+
 const awal = Number(location.hash.replace("#", ""));
 tampilkan(Number.isFinite(awal) && awal > 0 ? awal - 1 : 0);
+
+if (new URLSearchParams(location.search).has("all")) tampilSemua(slides[current]);

@@ -43,6 +43,12 @@ there; anything inside is publicly downloadable.
 - All user-visible copy is Bahasa Indonesia (formal, academic). Keep the
   existing terms: ruang hasil kali dalam, ortogonal, ortonormal, proyeksi,
   Gram-Schmidt.
+- The stage is a fixed **1600 x 900** canvas (`#deck`); `deck.js` scales it to
+  the viewport. Slides never scroll, so every slide's content must fit inside
+  900 px at 1600 px width. There is deliberately no mobile/flow fallback.
+- Open `/?all#12` to preview a slide with every `.frag` already revealed.
+- Keep the white theme: white background, black ink, one cobalt accent. Do not
+  add background images or external fonts.
 
 ## Commands
 
