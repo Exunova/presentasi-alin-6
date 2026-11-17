@@ -965,7 +965,6 @@
           const [label, color] of [
             [config.concept === "metric-negative" ? "a = (−4,3)" : "a = (4,3)", "#c53243"],
             ...(s.phase >= 1 ? [["b = (2,0)", "#1f4bff"]] : []),
-            ...(s.phase >= 2 ? [[config.concept === "metric-negative" ? "proyeksi = (−4,0)" : "proyeksi = (4,0)", "#15804a"]] : []),
           ]
         ) {
           const item = document.createElement("span");

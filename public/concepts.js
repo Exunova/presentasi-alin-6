@@ -12,7 +12,7 @@
     concept: "metric",
     title: "Memahami Hasil Kali Dalam",
     intro:
-      "Kita pilih dua vektor a dan b. Pada contoh ini, kita menggunakan hasil kali dalam Euclides: jumlah hasil kali komponen yang bersesuaian.",
+      "Hasil kali dalam menghasilkan nilai skalar dari dua vektor. Nilainya berkaitan dengan panjang dan hubungan arah keduanya. Contoh ini menggunakan hasil kali dalam Euclides.",
     source: "Ilustrasi Euclides untuk ALIN-6 hlm. 3–5; bukan definisi ulang ruang vektor.",
     application:
       "Grafika 3D: hasil kali dalam arah cahaya dan normal permukaan menentukan kuat pencahayaan pada model Lambert.",
@@ -25,14 +25,14 @@
       ),
       s(
         "Pilih arah acuan b",
-        "Kita pilih b = (2,0) sebagai acuan ke kanan. Vektor b adalah masukan kedua yang sengaja dipilih, bukan hasil perhitungan dari a. Kita ingin mengukur bagian gerak a pada arah ini.",
+        "Kita pilih b = (2,0) sebagai acuan ke kanan. Vektor b adalah masukan kedua yang sengaja dipilih, bukan hasil perhitungan dari a. Kita akan menghitung hasil kali dalam kedua vektor tersebut.",
         "a merah; b biru. Keduanya berawal pada titik yang sama.",
         1,
       ),
       s(
-        "Perhatikan bagian a pada arah b",
-        "Tarik garis tegak lurus dari ujung a ke garis b. Vektor proyeksinya adalah (4,0), dengan nilai bertanda 4. Nilai 4 ini belum merupakan hasil kali dalam.",
-        "Vektor proyeksi: (4,0)\nProyeksi bertanda: 4",
+        "Apa yang sebenarnya dicari?",
+        "Yang dicari adalah nilai skalar ⟨a,b⟩, bukan vektor baru. Pada aturan Euclides, nilai ini dipengaruhi panjang kedua vektor dan sudutnya: positif untuk sudut lancip, nol untuk tegak lurus, dan negatif untuk sudut tumpul.",
+        "Dua vektor a dan b → nilai skalar ⟨a,b⟩",
         2,
       ),
       s(
@@ -43,7 +43,7 @@
       ),
       s(
         "Hasil kali dalam kedua vektor adalah 8",
-        "Hasil kali komponen pertama adalah 8, sedangkan hasil kali komponen kedua adalah 0. Jumlahnya 8. Inilah nilai hasil kali dalam kedua vektor; bukan vektor baru atau luas segitiga.",
+        "Hasilnya 8, bernilai positif karena sudut antara a dan b lancip. Besar nilai ini juga dipengaruhi panjang kedua vektor; 8 bukan panjang vektor maupun besar sudut.",
         "⟨a,b⟩ = a₁b₁ + a₂b₂\n= (4 × 2) + (3 × 0)\n= 8 + 0 = 8",
         4,
       ),
@@ -61,7 +61,7 @@
     intro: "Arah acuan b tetap ke kanan. Sekarang a bergerak ke kiri dan ke atas.",
     steps: [
       s("Ubah arah gerak a", "Ambil a = (−4,3): 4 satuan ke kiri dan 3 satuan ke atas. Vektor acuan tetap b = (2,0).", "a = (−4,3); b = (2,0)", 1),
-      s("Proyeksi mengarah ke kiri", "Tarik tegak lurus dari ujung a ke garis mendatar. Proyeksinya berlawanan arah dengan b, sehingga nilai bertandanya −4.", "proyeksi bertanda = −4; panjang b = 2", 2),
+      s("Sudut kedua vektor kini tumpul", "Vektor a mengarah ke kiri atas, sedangkan b tetap ke kanan. Sudut di antara keduanya lebih dari 90°, sehingga hasil kali dalamnya akan negatif.", "Sudut tumpul → hasil kali dalam negatif", 2),
       s("Hitung dengan aturan yang sama", "Kalikan komponen yang bersesuaian, lalu jumlahkan. Komponen pertama memberi −8 dan komponen kedua memberi 0, sehingga hasil kali dalamnya −8.", "⟨a,b⟩ = (−4) × 2 + 3 × 0 = −8", 3),
       s("Bandingkan kedua arah gerak", "Kuadran I tadi memberi 8. Kuadran II ini memberi −8. Acuannya sama; yang berubah adalah arah komponen mendatar a.", "⟨(4,3),(2,0)⟩ = 8\n⟨(−4,3),(2,0)⟩ = −8", 4),
     ],
@@ -170,14 +170,14 @@
       n("path", { d: `M${x + 16},${y} v-16 h-16`, stroke: ink, "stroke-width": 2, fill: "none" });
     if (c.concept.startsWith("metric")) {
       const negative = c.concept === "metric-negative";
-      const t = clamp(p - 1), base = [negative ? 420 : 160, 335], A = [negative ? 140 : 440, 125], F = [A[0], 335];
+      const base = [negative ? 420 : 160, 335], A = [negative ? 140 : 440, 125];
       text(
         30,
         35,
         [
           "Satu vektor: a",
           "Dua vektor: a dan b",
-          negative ? "Bagian a yang berlawanan dengan b" : "Bagian a yang searah b",
+          negative ? "Sudut tumpul antara a dan b" : "Hubungan arah dua vektor",
           "Perkalian komponen yang bersesuaian",
           negative ? "Hasil kali dalam: −8" : "Hasil kali dalam: 8",
           "Ruang + hasil kali dalam yang memenuhi aksioma",
@@ -189,17 +189,6 @@
       text(base[0] - 17, 365, "0", 16, grey);
       text(690, 340, "x", 16, grey);
       text(base[0] + 8, 90, "y", 16, grey);
-      if (p > 1) {
-        n("polygon", {
-          points: `${base} ${A} ${A[0]},${125 + 210 * t}`,
-          fill: "#15804a",
-          "fill-opacity": .12 * t,
-        });
-        line(A, [A[0], 125 + 210 * t], grey, 2, "6 5");
-        line([base[0], 348], [base[0] + (negative ? -280 : 280) * t, 348], "#15804a", 7);
-        text(negative ? 270 : 295, 380, negative ? "−4" : "4", 23, "#15804a");
-        if (t === 1) square(...F);
-      }
       arrow(base, A, negative ? "a = (−4,3)" : "a = (4,3)", "#c53243");
       if (p > 0) arrow(base, [base[0] + 140 * clamp(p), 335], "b = (2,0)", blue);
       if (p >= 1) text(base[0] + 65, 315, "2", 23, blue);
@@ -208,14 +197,6 @@
         text(negative ? 440 : 500, 225, "+ 3 × 0", 27, ink);
         text(negative ? 440 : 500, 265, negative ? "= −8" : "= 8", 29, ink);
       }
-      text(
-        35,
-        445,
-        p < 2
-          ? "Diketahui → pertanyaan → proyeksi → hasil → makna"
-          : "Arsiran menunjukkan hubungan geometris, bukan besaran luas.",
-        18,
-      );
     } else {
       axes();
       const a = (45 + 45 * clamp(p)) * Math.PI / 180,
