@@ -24,8 +24,8 @@
         0,
       ),
       s(
-        "Pilih arah acuan b",
-        "Kita pilih b = (2,0) sebagai acuan ke kanan. Vektor b adalah masukan kedua yang sengaja dipilih, bukan hasil perhitungan dari a. Kita akan menghitung hasil kali dalam kedua vektor tersebut.",
+        "Diberikan pula vektor b",
+        "Diberikan pula vektor b = (2,0). Kita akan menghitung hasil kali dalam vektor a dan b.",
         "a merah; b biru. Keduanya berawal pada titik yang sama.",
         1,
       ),
@@ -58,12 +58,12 @@
     before: 4,
     concept: "metric-negative",
     title: "Hasil Kali Dalam di Kuadran II",
-    intro: "Arah acuan b tetap ke kanan. Sekarang a bergerak ke kiri dan ke atas.",
+    intro: "Vektor b tetap (2,0). Sekarang diberikan a = (−4,3).",
     steps: [
-      s("Ubah arah gerak a", "Ambil a = (−4,3): 4 satuan ke kiri dan 3 satuan ke atas. Vektor acuan tetap b = (2,0).", "a = (−4,3); b = (2,0)", 1),
+      s("Ubah arah gerak a", "Ambil a = (−4,3): 4 satuan ke kiri dan 3 satuan ke atas. Vektor b tetap (2,0).", "a = (−4,3); b = (2,0)", 1),
       s("Sudut kedua vektor kini tumpul", "Vektor a mengarah ke kiri atas, sedangkan b tetap ke kanan. Sudut di antara keduanya lebih dari 90°, sehingga hasil kali dalamnya akan negatif.", "Sudut tumpul → hasil kali dalam negatif", 2),
       s("Hitung dengan aturan yang sama", "Kalikan komponen yang bersesuaian, lalu jumlahkan. Komponen pertama memberi −8 dan komponen kedua memberi 0, sehingga hasil kali dalamnya −8.", "⟨a,b⟩ = (−4) × 2 + 3 × 0 = −8", 3),
-      s("Bandingkan kedua arah gerak", "Kuadran I tadi memberi 8. Kuadran II ini memberi −8. Acuannya sama; yang berubah adalah arah komponen mendatar a.", "⟨(4,3),(2,0)⟩ = 8\n⟨(−4,3),(2,0)⟩ = −8", 4),
+      s("Bandingkan kedua arah gerak", "Kuadran I tadi memberi 8. Kuadran II ini memberi −8. Vektor b tetap sama; yang berubah adalah arah komponen mendatar a.", "⟨(4,3),(2,0)⟩ = 8\n⟨(−4,3),(2,0)⟩ = −8", 4),
     ],
   }, {
     before: 12,
