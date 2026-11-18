@@ -9,7 +9,7 @@ const kv = await Deno.openKv(path);
 try {
   for (const [slide, script] of Object.entries(scripts)) {
     const key = ["alin-notes-v1", "slide", slide];
-    const marker = ["alin-notes-migrations", "provided-scripts-v3", slide];
+    const marker = ["alin-notes-migrations", "provided-scripts-v4", slide];
     const seeded = ["alin-notes-migrations", "presenter-guides-v1", slide];
     for (;;) {
       const done = await kv.get(marker);
@@ -17,7 +17,8 @@ try {
       const old = await kv.get<string>(key);
       const previous = await kv.get(["alin-notes-migrations", "spoken-scripts-v1", slide]);
       const supplied = await kv.get(["alin-notes-migrations", "provided-scripts-v2", slide]);
-      let extra = previous.value || supplied.value ? "" : (old.value || "").replace("PANDUAN PRESENTER\n\n" + guides[slide], "").trim();
+      const last = await kv.get(["alin-notes-migrations", "provided-scripts-v3", slide]);
+      let extra = previous.value || supplied.value || last.value ? "" : (old.value || "").replace("PANDUAN PRESENTER\n\n" + guides[slide], "").trim();
       if (slide === "concept-metric" && extra === "Ruang vektor yang dilengkapi operasi tersebut disebut ruang hasil kali dalam.") extra = "";
       const tx = kv.atomic().check(done).check(old).set(key, script).set(marker, true).set(seeded, true);
       if (extra) tx.set(["alin-notes-v1", "slide", slide + "::sticky::" + crypto.randomUUID()], extra);
